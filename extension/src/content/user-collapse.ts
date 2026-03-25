@@ -455,7 +455,9 @@ export function installUserCollapse(): UserCollapseController {
         updateButtonUi(btn, !expanded);
 
         requestAnimationFrame(() => {
-          preserveScrollAfterHeightChange(scroller!, prevScrollTop, prevScrollHeight, wasPinned);
+          if (scroller) {
+            preserveScrollAfterHeightChange(scroller, prevScrollTop, prevScrollHeight, wasPinned);
+          }
         });
       };
       document.addEventListener('click', onDocClick, true);

@@ -3,6 +3,7 @@ node_modules/
 
 # AI and speckit related
 .claude/
+.agents/
 .specify/
 specs/
 

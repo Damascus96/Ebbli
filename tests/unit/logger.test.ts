@@ -88,7 +88,7 @@ describe('logger', () => {
       logDebug('test message');
 
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [DEBUG]`,
+        `[${LOG_PREFIX}DEBUG]`,
         'test message'
       );
     });
@@ -99,7 +99,7 @@ describe('logger', () => {
       logDebug('test message', 'arg1', 42, { key: 'value' });
 
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [DEBUG]`,
+        `[${LOG_PREFIX}DEBUG]`,
         'test message',
         'arg1',
         42,
@@ -113,7 +113,7 @@ describe('logger', () => {
       logDebug('test message');
 
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [DEBUG]`,
+        `[${LOG_PREFIX}DEBUG]`,
         'test message'
       );
     });
@@ -126,7 +126,7 @@ describe('logger', () => {
       setDebugMode(true);
       logDebug('should appear');
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [DEBUG]`,
+        `[${LOG_PREFIX}DEBUG]`,
         'should appear'
       );
     });
@@ -154,7 +154,7 @@ describe('logger', () => {
       logInfo('info message');
 
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [INFO]`,
+        `[${LOG_PREFIX}INFO]`,
         'info message'
       );
     });
@@ -165,7 +165,7 @@ describe('logger', () => {
       logInfo('info message');
 
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [INFO]`,
+        `[${LOG_PREFIX}INFO]`,
         'info message'
       );
     });
@@ -174,7 +174,7 @@ describe('logger', () => {
       logInfo('info message', 'arg1', 42, { key: 'value' });
 
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [INFO]`,
+        `[${LOG_PREFIX}INFO]`,
         'info message',
         'arg1',
         42,
@@ -202,7 +202,7 @@ describe('logger', () => {
       logWarn('warning message');
 
       expect(consoleWarnSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [WARN]`,
+        `[${LOG_PREFIX}WARN]`,
         'warning message'
       );
     });
@@ -213,7 +213,7 @@ describe('logger', () => {
       logWarn('warning message');
 
       expect(consoleWarnSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [WARN]`,
+        `[${LOG_PREFIX}WARN]`,
         'warning message'
       );
     });
@@ -222,7 +222,7 @@ describe('logger', () => {
       logWarn('warning message', 'arg1', 42, { key: 'value' });
 
       expect(consoleWarnSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [WARN]`,
+        `[${LOG_PREFIX}WARN]`,
         'warning message',
         'arg1',
         42,
@@ -250,7 +250,7 @@ describe('logger', () => {
       logError('error message');
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [ERROR]`,
+        `[${LOG_PREFIX}ERROR]`,
         'error message'
       );
     });
@@ -261,7 +261,7 @@ describe('logger', () => {
       logError('error message');
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [ERROR]`,
+        `[${LOG_PREFIX}ERROR]`,
         'error message'
       );
     });
@@ -270,7 +270,7 @@ describe('logger', () => {
       logError('error message', 'arg1', 42, { key: 'value' });
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [ERROR]`,
+        `[${LOG_PREFIX}ERROR]`,
         'error message',
         'arg1',
         42,
@@ -284,7 +284,7 @@ describe('logger', () => {
       logError('operation failed', error);
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [ERROR]`,
+        `[${LOG_PREFIX}ERROR]`,
         'operation failed',
         error
       );
@@ -325,7 +325,7 @@ describe('logger', () => {
       logDebug(specialMessage);
 
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [DEBUG]`,
+        `[${LOG_PREFIX}DEBUG]`,
         specialMessage
       );
     });
@@ -336,7 +336,7 @@ describe('logger', () => {
       logDebug('message', null, undefined);
 
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [DEBUG]`,
+        `[${LOG_PREFIX}DEBUG]`,
         'message',
         null,
         undefined
@@ -351,7 +351,7 @@ describe('logger', () => {
       logDebug(longMessage);
 
       expect(consoleLogSpy).toHaveBeenCalledWith(
-        `${LOG_PREFIX} [DEBUG]`,
+        `[${LOG_PREFIX}DEBUG]`,
         longMessage
       );
     });
@@ -406,17 +406,17 @@ describe('logger', () => {
       expect(consoleLogSpy).toHaveBeenCalledTimes(3);
       expect(consoleLogSpy).toHaveBeenNthCalledWith(
         1,
-        `${LOG_PREFIX} [DEBUG]`,
+        `[${LOG_PREFIX}DEBUG]`,
         'first'
       );
       expect(consoleLogSpy).toHaveBeenNthCalledWith(
         2,
-        `${LOG_PREFIX} [DEBUG]`,
+        `[${LOG_PREFIX}DEBUG]`,
         'second'
       );
       expect(consoleLogSpy).toHaveBeenNthCalledWith(
         3,
-        `${LOG_PREFIX} [DEBUG]`,
+        `[${LOG_PREFIX}DEBUG]`,
         'third'
       );
     });

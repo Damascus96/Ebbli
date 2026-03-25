@@ -261,19 +261,19 @@ function setupNavigationDetection(): void {
     });
   };
 
-  // Listen for popstate events
-  window.addEventListener('popstate', () => {
-    if (location.href !== lastUrl) {
-      scheduleNavSideEffects('popstate');
-    }
-  });
-
   // Patch history methods for SPA navigation detection
   // Guard against double patching (e.g. extension reload / unexpected reinjection).
   const PATCH_FLAG = '__lightsession_patched_history__';
   const patchScope = window as unknown as Record<string, unknown>;
   if (patchScope[PATCH_FLAG] === true) return;
   patchScope[PATCH_FLAG] = true;
+
+  // Listen for popstate events (inside the guard so it's only registered once)
+  window.addEventListener('popstate', () => {
+    if (location.href !== lastUrl) {
+      scheduleNavSideEffects('popstate');
+    }
+  });
 
   const originalPushState = history.pushState.bind(history);
   const originalReplaceState = history.replaceState.bind(history);

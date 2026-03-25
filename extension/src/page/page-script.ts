@@ -290,10 +290,6 @@ async function interceptedFetch(
     }
   }
 
-  if (!configReceived) {
-    return nativeFetch(...args);
-  }
-
   // Skip if disabled
   if (!cfg.enabled) {
     return nativeFetch(...args);
