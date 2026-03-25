@@ -298,6 +298,26 @@ describe('trimMapping - root node preservation', () => {
     // But it doesn't count as visible
     expect(result!.visibleKept).toBe(2);
   });
+
+  it('does not force-preserve visible first node as root anchor when trimming', () => {
+    // When conversation starts with a visible user message (no rootless anchor),
+    // the first node should NOT be duplicated as an anchor if it's trimmed away.
+    // [user, assistant, user, assistant] with limit=2 should trim the first 2 turns.
+    const { mapping, current_node } = buildConversation([
+      'user',
+      'assistant',
+      'user',
+      'assistant',
+    ]);
+    const result = trimMapping({ mapping, current_node }, 2);
+
+    expect(result).not.toBeNull();
+    // First node (user) should be trimmed, not force-preserved as root
+    expect(result!.mapping['node-0']).toBeUndefined();
+    // Root should be the first kept visible node, not node-0
+    expect(result!.root).toBe('node-2');
+    expect(result!.visibleKept).toBe(2);
+  });
 });
 
 // ============================================================================

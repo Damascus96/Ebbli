@@ -56,7 +56,7 @@ export function isDebugMode(): boolean {
  */
 export function logDebug(message: string, ...args: unknown[]): void {
   if (debugEnabled) {
-    safeConsole.log(`${LOG_PREFIX} [DEBUG]`, message, ...args);
+    safeConsole.log(`[${LOG_PREFIX}DEBUG]`, message, ...args);
   }
 }
 
@@ -64,19 +64,19 @@ export function logDebug(message: string, ...args: unknown[]): void {
  * Log warning (always shown)
  */
 export function logWarn(message: string, ...args: unknown[]): void {
-  safeConsole.warn(`${LOG_PREFIX} [WARN]`, message, ...args);
+  safeConsole.warn(`[${LOG_PREFIX}WARN]`, message, ...args);
 }
 
 /**
  * Log error (always shown)
  */
 export function logError(message: string, ...args: unknown[]): void {
-  safeConsole.error(`${LOG_PREFIX} [ERROR]`, message, ...args);
+  safeConsole.error(`[${LOG_PREFIX}ERROR]`, message, ...args);
 }
 
 /**
  * Log info (always shown)
  */
 export function logInfo(message: string, ...args: unknown[]): void {
-  safeConsole.log(`${LOG_PREFIX} [INFO]`, message, ...args);
+  safeConsole.log(`[${LOG_PREFIX}INFO]`, message, ...args);
 }

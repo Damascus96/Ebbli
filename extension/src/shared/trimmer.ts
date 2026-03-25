@@ -184,7 +184,7 @@ export function trimMapping(
   // Preserve original root node - ChatGPT needs this "(no role)" node as tree anchor
   const originalRootId = path[0];
   const originalRootNode = originalRootId ? mapping[originalRootId] : null;
-  const hasOriginalRoot = originalRootId && originalRootNode;
+  const hasOriginalRoot = originalRootId && originalRootNode && !isVisibleMessage(originalRootNode);
 
   // Build new mapping with kept nodes + original root
   const newMapping: ChatMapping = {};

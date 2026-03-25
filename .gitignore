@@ -3,6 +3,7 @@ node_modules/
 
 # AI and speckit related
 .claude/
+.agents/
 .specify/
 specs/
 
@@ -50,3 +51,4 @@ extension/.dev
 *.temp
 .serena/
 extension/manifest.json
+.signum/
