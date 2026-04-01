@@ -10,7 +10,7 @@
  */
 
 import browser from '../shared/browser-polyfill';
-import type { EbSettings, TrimStatus } from '../shared/types';
+import type { LsSettings, TrimStatus } from '../shared/types';
 import { loadSettings, validateSettings, syncToLocalStorage } from '../shared/storage';
 import { TIMING } from '../shared/constants';
 import { setDebugMode, logDebug, logInfo, logWarn, logError } from '../shared/logger';
@@ -54,7 +54,7 @@ function isValidTrimStatus(obj: unknown): obj is TrimStatus {
 // Global State
 // ============================================================================
 
-let currentSettings: EbSettings | null = null;
+let currentSettings: LsSettings | null = null;
 let proxyReady = false;
 let emptyChatState = false;
 let emptyChatCheckTimer: number | null = null;
@@ -80,7 +80,7 @@ let userCollapse: UserCollapseController | null = null;
  *
  * @see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Sharing_objects_with_page_scripts
  */
-function dispatchConfig(settings: EbSettings): void {
+function dispatchConfig(settings: LsSettings): void {
   const config: PageScriptConfig = {
     enabled: settings.enabled,
     limit: settings.keep,
@@ -153,7 +153,7 @@ function checkProxyStatus(): void {
  * Apply settings changes.
  * Dispatches config to page script and updates status bar visibility.
  */
-function applySettings(settings: EbSettings): void {
+function applySettings(settings: LsSettings): void {
   const prevSettings = currentSettings;
   currentSettings = settings;
 
@@ -195,9 +195,9 @@ function applySettings(settings: EbSettings): void {
  */
 function setUltraLeanMode(enabled: boolean): void {
   if (enabled) {
-    document.documentElement.classList.add('eb-ultra-lean');
+    document.documentElement.classList.add('ls-ultra-lean');
   } else {
-    document.documentElement.classList.remove('eb-ultra-lean');
+    document.documentElement.classList.remove('ls-ultra-lean');
   }
 }
 
@@ -212,12 +212,12 @@ function handleStorageChange(
     return;
   }
 
-  if (!changes.eb_settings?.newValue) {
+  if (!changes.ls_settings?.newValue) {
     return;
   }
 
   // Validate settings to ensure proper types and ranges
-  const newSettings = validateSettings(changes.eb_settings.newValue as Partial<EbSettings>);
+  const newSettings = validateSettings(changes.ls_settings.newValue as Partial<LsSettings>);
   logInfo('Settings changed via storage:', newSettings);
 
   // Sync to localStorage for page-script access (Chrome MV3 workaround)
@@ -427,7 +427,7 @@ if (document.readyState === 'loading') {
  * Global error handler to prevent extension errors from breaking the page
  */
 window.addEventListener('error', (event) => {
-  if (event.message?.includes('EB:') || event.filename?.includes('Ebbli')) {
+  if (event.message?.includes('LS:') || event.filename?.includes('Ebbli')) {
     logError('Unhandled error:', event.error || event.message);
     event.preventDefault();
   }
