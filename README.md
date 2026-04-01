@@ -1,240 +1,111 @@
-# ⚡ Ebbli
+# Ebbli
 
-Keep ChatGPT fast by keeping only the last N messages in the DOM.
-Local-only, privacy-first browser extension that fixes UI lag in long conversations.
+*Signals drifting through the current.*
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+Long ChatGPT conversations eventually slow the browser down. Every message stays in the DOM. After a few hundred exchanges, scrolling lags, typing stutters, and the tab quietly starts consuming the machine.
 
----
+Ebbli fixes this by intercepting ChatGPT's API responses and trimming older messages before the page ever renders them. The DOM stays lean. The conversation stays intact on OpenAI's servers. Nothing is deleted — only the view is optimized.
 
-## 🤔 Why Ebbli?
-
-Long ChatGPT threads are brutal for the browser: the UI keeps every message in the DOM and the tab slowly turns into molasses — scroll becomes choppy, typing lags, devtools crawl.
-
-**Ebbli** fixes that by intercepting API responses and trimming conversation data *before* React renders it, keeping the actual conversation intact on OpenAI's side.
-
-- **Fixes UI lag** in long chats
-- **Keeps model context intact** (only the DOM is trimmed)
-- **100% local** – no servers, no analytics, no tracking
-
-Built after too many coding sessions where a single ChatGPT tab would start eating CPU and turn the browser into a slideshow.
+No telemetry. No network requests. Everything runs locally.
 
 ---
 
-## 🎯 Who is this for?
+## How it works
 
-- People who keep **very long ChatGPT threads** (100+ messages)
-- Developers who use ChatGPT for **debugging, code reviews, or long refactors**
-- Anyone whose ChatGPT tab becomes **sluggish after a while**
+Ebbli injects a page script at `document_start` that patches `window.fetch`. When ChatGPT receives a conversation response, Ebbli intercepts the JSON, counts messages by role, keeps only the most recent N, and returns the modified response before React renders anything. Because trimming happens before rendering, the DOM never grows large enough to cause problems.
+
+The full conversation remains on OpenAI's servers. A page refresh restores it.
 
 ---
 
-## ✨ Features
+## Features
 
 **Performance**
-
-- **Fetch Proxy** – intercepts API responses and trims JSON before React renders (no flash of untrimmed content)
-- **Message-based counting** – counts conversation messages (aggregated by role), not individual nodes, for accurate limits
-- **Automatic trimming** – keeps only the last _N_ messages visible (configurable range: 1–100)
-- **Ultra Lean Mode** _(Experimental)_ – aggressive CSS optimizations: kills animations, applies containment
-
-**User experience**
-
-- **Configurable** – choose how many recent messages to keep (1–100)
-- **Status indicator** – optional on-page pill showing trim statistics
-- **Reversible** – refresh the page to restore the full conversation
+Fetch proxy architecture with no DOM flash. Message-based counting instead of node counting. Configurable limits from 1 to 100 messages. Optional Ultra Lean Mode for very large threads.
 
 **Privacy**
+No analytics, no telemetry, no external services. Settings stored locally via `browser.storage.local`.
 
-- **Zero network requests** – no data leaves your browser
-- **Local settings only** – uses `browser.storage.local` for configuration
-- **No telemetry** – no analytics, tracking, or usage reporting
-- **Domain-scoped** – runs only on `chat.openai.com` and `chatgpt.com`
+**Controls**
+Popup interface for adjusting trim limits. Optional on-page status indicator showing current trim statistics.
 
 ---
 
-### Manual install (development)
+## Who this is for
 
-```bash
-git clone https://github.com/Damascus96/Ebbli.git
-cd Ebbli
-npm install
+People who keep very long ChatGPT threads — debugging sessions, multi-hour research, extended coding work — and notice the browser getting slower the longer the conversation runs.
 
-# Build for Firefox
-npm run build:firefox
+---
 
-# Build for Chrome
-npm run build:chrome
-```
+## Installation
 
-**Firefox:**
-1. Open `about:debugging#/runtime/this-firefox`
-2. Click **Load Temporary Add-on**
-3. Select `extension/manifest.json`
+**Firefox**
+Download the signed `.xpi` from the Releases page and open it in Firefox. Firefox will prompt you to install.
 
-**Chrome:**
+**Chrome**
+Download the ZIP from Releases.
+
 1. Open `chrome://extensions`
-2. Enable **Developer mode**
-3. Click **Load unpacked**
+2. Enable Developer Mode
+3. Click Load unpacked
 4. Select the `extension/` folder
 
 ---
 
-## 🚀 Usage
+## Development
 
-### Basic usage
-
-1. Open a long ChatGPT conversation (or create one).
-2. Click the Ebbli toolbar icon.
-3. Ensure **Extension enabled** is checked. Trimming will now happen automatically.
-4. Use the slider to choose how many of the most recent messages to keep (1–100).
-
-When you want to see the full history again:
-
-- Click **Refresh** in the popup, **or**
-- Reload the ChatGPT page.
-
-### Settings
-
-- **Extension enabled** – master on/off toggle.
-- **Keep last N messages** – how many messages remain visible in the DOM (1–100).
-- **Show status bar** – display a floating pill with trim statistics.
-- **Ultra Lean Mode** – aggressive performance mode for very long/laggy chats (experimental).
-- **Refresh** – reloads the page to restore all messages.
-
-### Keyboard accessibility
-
-- Navigate controls with **Tab / Shift+Tab**.
-- Toggle checkboxes and buttons with **Enter / Space**.
-- Adjust the slider with **arrow keys**.
-
----
-
-## ❓ FAQ
-
-### Does this reduce the model's context?
-
-No. Ebbli only trims the **DOM** (what the browser renders), not the data stored by OpenAI.
-
-- The conversation on OpenAI's servers remains intact.
-- Reloading the page (or using **Refresh** in the popup) restores the full history.
-
-### Is my data safe?
-
-Yes:
-
-- No external network requests are made by the extension.
-- No analytics, tracking, or telemetry.
-- Settings are stored locally in `browser.storage.local`.
-
-### What happens if ChatGPT's UI changes?
-
-Ebbli uses a multi-tier selector strategy and conservative fallbacks, but a major UI redesign may temporarily break trimming. In that case:
-
-- The extension will simply stop trimming (fail-safe).
-- Your conversations will continue to work as usual.
-- An update will be released to restore trimming behavior.
-
----
-
-## 🔧 How it works
-
-Ebbli uses a **Fetch Proxy** architecture:
-
-1. **Injection** – at `document_start`, injects a script into the page context before ChatGPT loads.
-2. **Interception** – patches `window.fetch` to intercept `/backend-api/` JSON responses.
-3. **Trimming** – parses the conversation mapping, counts messages (role transitions), keeps the last N messages.
-4. **Response** – if there are more messages than the limit, returns a modified Response with trimmed JSON; otherwise passes the original response through unchanged.
-
-**Message counting**: A "message" is a contiguous sequence of nodes from the same role. Consecutive assistant nodes (e.g., from Extended Thinking) are aggregated as ONE message.
-
-Trimming only affects what the browser renders. The conversation itself remains on OpenAI's side and is fully recoverable by reloading the page.
-
----
-
-## 🛠️ Development
-
-### Requirements
-
-- Node.js >= 24.10.0 (see `.node-version`)
-- npm >= 10
-- Firefox >= 115 or Chrome >= 120
-
-### Scripts
-
+Requires Node.js >= 24 and npm >= 10.
 ```bash
-npm install              # Install dependencies
-
-# Build
-npm run build            # Build for Firefox (default)
-npm run build:firefox    # Build for Firefox
-npm run build:chrome     # Build for Chrome
-
-# Development
-npm run dev              # Run in Firefox Developer Edition
-npm run watch:chrome     # Watch mode for Chrome
-
-# Quality
-npm run test             # Run tests
-npm run lint             # Lint
-npm run build:types      # Type check
-
-# Package
-npm run package          # Package for Firefox (web-ext-artifacts/)
-npm run package:chrome   # Package for Chrome (ZIP)
+npm install
+npm run build:firefox
+npm run build:chrome
 ```
-
-### Project structure
-
 ```
 extension/
-├── src/
-│   ├── content/        # Content scripts (settings dispatch, status bar)
-│   ├── page/           # Page script (Fetch Proxy, runs in page context)
-│   ├── background/     # Background service worker
-│   ├── popup/          # Popup UI (HTML/CSS/JS)
-│   └── shared/         # Shared types, constants, utilities
-├── dist/               # Compiled output (TypeScript → JavaScript)
-├── icons/              # Extension icons
-├── manifest.firefox.json  # Firefox manifest (MV3)
-├── manifest.chrome.json   # Chrome manifest (MV3)
-└── manifest.json          # Active manifest (symlink/copy from build)
+  src/
+    content/
+    page/
+    popup/
+    background/
+    shared/
+  dist/
+  icons/
 ```
 
-### Architecture
+---
 
-- **Fetch Proxy** – patches `window.fetch` in page context to intercept API responses
-- **Message-based trimming** – counts role transitions (aggregated messages), not individual nodes
-- **Content ↔ Page communication** – CustomEvents for settings dispatch and status updates
-- **HIDDEN_ROLES** – system, tool, thinking nodes excluded from message count
+## Architecture
+
+Ebbli uses a fetch interception approach rather than post-render DOM manipulation.
+
+1. A page script is injected at `document_start`
+2. The script patches `window.fetch`
+3. ChatGPT API responses are intercepted
+4. Conversation JSON is parsed and trimmed by message count
+5. A modified response is returned to the page before React renders
+
+This prevents the browser from ever building large message trees while keeping the full conversation intact on the server. The tradeoff is intentional: trimming before render means no flash of unoptimized content, but it requires patching the fetch layer rather than working in the DOM directly.
 
 ---
 
-## 🌐 Compatibility
+## Compatibility
 
-- **Browsers:** Firefox >= 115, Chrome >= 120 (Manifest V3)
-- **OS:** Windows, macOS, Linux
-- **ChatGPT:** Optimized for the current UI (2025–2026), resilient to small layout changes
+Firefox >= 115, Chrome >= 120. Windows, macOS, Linux.
 
 ---
 
-## 🤝 Contributing
+## Attribution
 
-Pull requests are welcome.
-For larger changes or new features, please open an issue first to discuss the approach.
+Ebbli is built on [LightSession](https://github.com/11me/light-session), an open source project by 11me, extended with additional architecture, UI, and performance changes.
 
----
-
-## 📄 License
-
-MIT License - see [LICENSE](LICENSE) for details.
+The name follows the Hiraeth House naming pattern — *ebb*, as in the pull of a current receding, with *li* as the closing syllable shared across all products in the family.
 
 ---
 
-## ❤️ Support
-
-- **Issues:** [GitHub Issues](https://github.com/Damascus96/Ebbli)
+Ebbli is a Hiraeth House product.
 
 ---
 
-**Disclaimer**: This is an unofficial extension not affiliated with OpenAI.
+## License
+
+MIT
