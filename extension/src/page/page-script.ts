@@ -97,7 +97,7 @@ const configStartTime = Date.now();
 /**
  * localStorage key - must match storage.ts LOCAL_STORAGE_KEY
  */
-const LOCAL_STORAGE_KEY = 'ebbli_config';
+const LOCAL_STORAGE_KEY = 'eb_config';
 
 /**
  * Load config from localStorage (synced by content script).

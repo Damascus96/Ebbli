@@ -127,13 +127,13 @@ describe('user-collapse', () => {
     lastCtrl = ctrl;
 
     const bubble = document.querySelector('.user-message-bubble-color') as HTMLElement;
-    const btn = bubble.querySelector('button.ls-uc-toggle') as HTMLButtonElement;
+    const btn = bubble.querySelector('button.eb-uc-toggle') as HTMLButtonElement;
 
     expect(btn).not.toBeNull();
     expect(btn.getAttribute('aria-expanded')).toBe('false');
-    expect(bubble.getAttribute('data-ls-uc-state')).toBe('collapsed');
+    expect(bubble.getAttribute('data-eb-uc-state')).toBe('collapsed');
     expect(btn.getAttribute('aria-controls')).toBe(text.id);
-    expect(text.classList.contains('ls-uc-text')).toBe(true);
+    expect(text.classList.contains('eb-uc-text')).toBe(true);
   });
 
   it('does not add toggle for short user messages', () => {
@@ -160,7 +160,7 @@ describe('user-collapse', () => {
     lastCtrl = ctrl;
 
     const bubble = document.querySelector('.user-message-bubble-color') as HTMLElement;
-    expect(bubble.querySelector('button.ls-uc-toggle')).toBeNull();
+    expect(bubble.querySelector('button.eb-uc-toggle')).toBeNull();
   });
 
   it('toggle flips aria-expanded + state attribute', () => {
@@ -188,15 +188,15 @@ describe('user-collapse', () => {
     lastCtrl = ctrl;
 
     const bubble = document.querySelector('.user-message-bubble-color') as HTMLElement;
-    const btn = bubble.querySelector('button.ls-uc-toggle') as HTMLButtonElement;
+    const btn = bubble.querySelector('button.eb-uc-toggle') as HTMLButtonElement;
 
     btn.click();
     expect(btn.getAttribute('aria-expanded')).toBe('true');
-    expect(bubble.getAttribute('data-ls-uc-state')).toBe('expanded');
+    expect(bubble.getAttribute('data-eb-uc-state')).toBe('expanded');
 
     btn.click();
     expect(btn.getAttribute('aria-expanded')).toBe('false');
-    expect(bubble.getAttribute('data-ls-uc-state')).toBe('collapsed');
+    expect(bubble.getAttribute('data-eb-uc-state')).toBe('collapsed');
   });
 
   it('does not duplicate toggles when processing the same message again', () => {
@@ -223,14 +223,14 @@ describe('user-collapse', () => {
     lastCtrl = ctrl;
 
     const bubble = document.querySelector('.user-message-bubble-color') as HTMLElement;
-    expect(bubble.querySelectorAll('button.ls-uc-toggle').length).toBe(1);
+    expect(bubble.querySelectorAll('button.eb-uc-toggle').length).toBe(1);
 
     const turns = document.getElementById('turns') as HTMLElement;
     const mo = getObserverForContainer(turns);
     const root = document.getElementById('root') as HTMLElement;
     mo.trigger([{ type: 'childList', addedNodes: [root] }]);
 
-    expect(bubble.querySelectorAll('button.ls-uc-toggle').length).toBe(1);
+    expect(bubble.querySelectorAll('button.eb-uc-toggle').length).toBe(1);
   });
 
   it('teardown disconnects observer and removes toggles', () => {
@@ -257,7 +257,7 @@ describe('user-collapse', () => {
     lastCtrl = ctrl;
 
     const bubble = document.querySelector('.user-message-bubble-color') as HTMLElement;
-    expect(bubble.querySelector('button.ls-uc-toggle')).not.toBeNull();
+    expect(bubble.querySelector('button.eb-uc-toggle')).not.toBeNull();
 
     const turns = document.querySelector('[data-testid="conversation-turns"]') as HTMLElement;
     const mo = getObserverForContainer(turns);
@@ -265,8 +265,8 @@ describe('user-collapse', () => {
     lastCtrl = null;
 
     expect(mo.disconnected).toBe(true);
-    expect(bubble.querySelector('button.ls-uc-toggle')).toBeNull();
-    expect(document.getElementById('lightsession-user-collapse-styles')).toBeNull();
+    expect(bubble.querySelector('button.eb-uc-toggle')).toBeNull();
+    expect(document.getElementById('Ebbli-user-collapse-styles')).toBeNull();
   });
 
   it('processes user roots that become eligible via attribute changes (SPA recycling)', () => {
@@ -293,7 +293,7 @@ describe('user-collapse', () => {
     lastCtrl = ctrl;
 
     const bubble = document.querySelector('.user-message-bubble-color') as HTMLElement;
-    expect(bubble.querySelector('button.ls-uc-toggle')).toBeNull();
+    expect(bubble.querySelector('button.eb-uc-toggle')).toBeNull();
 
     // Simulate SPA updating attributes after initial DOM insertion.
     const root = document.getElementById('root') as HTMLElement;
@@ -303,7 +303,7 @@ describe('user-collapse', () => {
     const mo = getObserverForContainer(turns);
     mo.trigger([{ type: 'attributes', addedNodes: [], target: root }]);
 
-    expect(bubble.querySelector('button.ls-uc-toggle')).not.toBeNull();
-    expect(bubble.getAttribute('data-ls-uc-state')).toBe('collapsed');
+    expect(bubble.querySelector('button.eb-uc-toggle')).not.toBeNull();
+    expect(bubble.getAttribute('data-eb-uc-state')).toBe('collapsed');
   });
 });

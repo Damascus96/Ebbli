@@ -40,7 +40,7 @@ export function isEbbliRejection(
 
   // Fallback heuristics (only used if runtime URL isn't available).
   // Our logger prefix sometimes appears in thrown messages.
-  if (haystack.includes('LS:')) return true;
+  if (haystack.includes('EB:')) return true;
 
   // Useful in dev builds / source maps.
   if (haystack.includes('light-session')) return true;

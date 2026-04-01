@@ -243,13 +243,13 @@ describe('fetch interception with trimMapping', () => {
 // ============================================================================
 
 describe('config JSON parsing (cross-browser compatibility)', () => {
-  interface LsConfig {
+  interface EbConfig {
     enabled: boolean;
     limit: number;
     debug: boolean;
   }
 
-  const DEFAULT_CONFIG: LsConfig = {
+  const DEFAULT_CONFIG: EbConfig = {
     enabled: true,
     limit: 10,
     debug: false,
@@ -259,17 +259,17 @@ describe('config JSON parsing (cross-browser compatibility)', () => {
    * Parse config from CustomEvent detail.
    * Mirrors the logic in page-script.ts setupConfigListener()
    */
-  function parseConfigFromDetail(detail: unknown): LsConfig | null {
-    let config: LsConfig | null = null;
+  function parseConfigFromDetail(detail: unknown): EbConfig | null {
+    let config: EbConfig | null = null;
 
     if (typeof detail === 'string') {
       try {
-        config = JSON.parse(detail) as LsConfig;
+        config = JSON.parse(detail) as EbConfig;
       } catch {
         return null;
       }
     } else if (detail && typeof detail === 'object') {
-      config = detail as LsConfig;
+      config = detail as EbConfig;
     }
 
     if (config && typeof config === 'object') {
@@ -511,9 +511,9 @@ describe('fetch interception no-trim path (visibleKept === visibleTotal)', () =>
     vi.resetModules();
     vi.clearAllMocks();
     localStorage.clear();
-    delete (window as unknown as { __LS_PROXY_PATCHED__?: boolean }).__LS_PROXY_PATCHED__;
-    delete (window as unknown as { __LS_CONFIG__?: unknown }).__LS_CONFIG__;
-    delete (window as unknown as { __LS_DEBUG__?: boolean }).__LS_DEBUG__;
+    delete (window as unknown as { __Ebbli_PROXY_PATCHED__?: boolean }).__Ebbli_PROXY_PATCHED__;
+    delete (window as unknown as { __Ebbli_CONFIG__?: unknown }).__Ebbli_CONFIG__;
+    delete (window as unknown as { __Ebbli_DEBUG__?: boolean }).__Ebbli_DEBUG__;
   });
 
   afterEach(() => {
@@ -521,7 +521,7 @@ describe('fetch interception no-trim path (visibleKept === visibleTotal)', () =>
   });
 
   it('returns original response when visibleKept === visibleTotal', async () => {
-    localStorage.setItem('ls_config', JSON.stringify({ enabled: true, limit: 10, debug: false }));
+    localStorage.setItem('eb_config', JSON.stringify({ enabled: true, limit: 10, debug: false }));
 
     const conversationData = createConversationData(4);
     const originalResponse = createMockResponse(conversationData);
@@ -548,8 +548,8 @@ describe('fetch interception no-trim path (visibleKept === visibleTotal)', () =>
     expect(result).toBe(originalResponse);
   });
 
-  it('dispatches lightsession-status with removed === 0 when visibleKept === visibleTotal', async () => {
-    localStorage.setItem('ls_config', JSON.stringify({ enabled: true, limit: 10, debug: false }));
+  it('dispatches Ebbli-status with removed === 0 when visibleKept === visibleTotal', async () => {
+    localStorage.setItem('eb_config', JSON.stringify({ enabled: true, limit: 10, debug: false }));
 
     const conversationData = createConversationData(4);
     const nativeFetch = vi.fn(async () => createMockResponse(conversationData));
@@ -567,7 +567,7 @@ describe('fetch interception no-trim path (visibleKept === visibleTotal)', () =>
     });
 
     const statusEvents: unknown[] = [];
-    window.addEventListener('lightsession-status', ((e: CustomEvent) => {
+    window.addEventListener('Ebbli-status', ((e: CustomEvent) => {
       statusEvents.push(e.detail);
     }) as EventListener);
 
@@ -586,7 +586,7 @@ describe('fetch interception no-trim path (visibleKept === visibleTotal)', () =>
   });
 
   it('returns original response when visibleKept === visibleTotal (exact limit: 5 of 5)', async () => {
-    localStorage.setItem('ls_config', JSON.stringify({ enabled: true, limit: 5, debug: false }));
+    localStorage.setItem('eb_config', JSON.stringify({ enabled: true, limit: 5, debug: false }));
 
     const conversationData = createConversationData(5);
     const originalResponse = createMockResponse(conversationData);
@@ -612,7 +612,7 @@ describe('fetch interception no-trim path (visibleKept === visibleTotal)', () =>
   });
 
   it('returns original response when visibleKept === visibleTotal (single message: 1 of 1)', async () => {
-    localStorage.setItem('ls_config', JSON.stringify({ enabled: true, limit: 10, debug: false }));
+    localStorage.setItem('eb_config', JSON.stringify({ enabled: true, limit: 10, debug: false }));
 
     const conversationData = createConversationData(1);
     const originalResponse = createMockResponse(conversationData);
@@ -650,9 +650,9 @@ describe('config gating in fetch interception', () => {
     vi.clearAllMocks();
     localStorage.clear();
     document.body.innerHTML = '';
-    delete (window as unknown as { __LS_PROXY_PATCHED__?: boolean }).__LS_PROXY_PATCHED__;
-    delete (window as unknown as { __LS_CONFIG__?: unknown }).__LS_CONFIG__;
-    delete (window as unknown as { __LS_DEBUG__?: boolean }).__LS_DEBUG__;
+    delete (window as unknown as { __Ebbli_PROXY_PATCHED__?: boolean }).__Ebbli_PROXY_PATCHED__;
+    delete (window as unknown as { __Ebbli_CONFIG__?: unknown }).__Ebbli_CONFIG__;
+    delete (window as unknown as { __Ebbli_DEBUG__?: boolean }).__Ebbli_DEBUG__;
   });
 
   it('skips trimming when config is not received', async () => {
@@ -670,7 +670,7 @@ describe('config gating in fetch interception', () => {
   });
 
   it('trims when config is available from localStorage', async () => {
-    localStorage.setItem('ls_config', JSON.stringify({ enabled: true, limit: 2, debug: false }));
+    localStorage.setItem('eb_config', JSON.stringify({ enabled: true, limit: 2, debug: false }));
 
     const conversationData = createConversationData(4);
     const nativeFetch = vi.fn(async () => createMockResponse(conversationData));

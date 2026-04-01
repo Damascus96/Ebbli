@@ -13,7 +13,7 @@ import {
   removeStatusBar,
 } from '../../extension/src/content/status-bar';
 
-const WAITING_TEXT = 'LightSession · waiting for messages…';
+const WAITING_TEXT = 'Ebbli · waiting for messages…';
 
 describe('status bar behavior', () => {
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe('status bar behavior', () => {
   it('creates a status bar with waiting text when no stats are available', () => {
     showStatusBar();
 
-    const bar = document.getElementById('lightsession-status-bar');
+    const bar = document.getElementById('Ebbli-status-bar');
     expect(bar).not.toBeNull();
     expect(bar?.textContent).toBe(WAITING_TEXT);
   });
@@ -47,12 +47,12 @@ describe('status bar behavior', () => {
 
     vi.advanceTimersByTime(TIMING.STATUS_BAR_THROTTLE_MS);
 
-    const bar = document.getElementById('lightsession-status-bar');
-    expect(bar?.textContent).toBe('LightSession · last 3 · 2 trimmed');
+    const bar = document.getElementById('Ebbli-status-bar');
+    expect(bar?.textContent).toBe('Ebbli · last 3 · 2 trimmed');
 
     resetAccumulatedTrimmed();
 
-    const resetBar = document.getElementById('lightsession-status-bar');
+    const resetBar = document.getElementById('Ebbli-status-bar');
     expect(resetBar?.textContent).toBe(WAITING_TEXT);
   });
 
@@ -68,8 +68,8 @@ describe('status bar behavior', () => {
     });
     vi.advanceTimersByTime(TIMING.STATUS_BAR_THROTTLE_MS);
 
-    const bar = document.getElementById('lightsession-status-bar');
-    expect(bar?.textContent).toBe('LightSession · last 3 · 5 trimmed');
+    const bar = document.getElementById('Ebbli-status-bar');
+    expect(bar?.textContent).toBe('Ebbli · last 3 · 5 trimmed');
 
     // Repeated status event with the same absolute "currently trimmed" count
     updateStatusBar({
@@ -80,8 +80,8 @@ describe('status bar behavior', () => {
     });
     vi.advanceTimersByTime(TIMING.STATUS_BAR_THROTTLE_MS);
 
-    const bar2 = document.getElementById('lightsession-status-bar');
-    expect(bar2?.textContent).toBe('LightSession · last 3 · 5 trimmed');
+    const bar2 = document.getElementById('Ebbli-status-bar');
+    expect(bar2?.textContent).toBe('Ebbli · last 3 · 5 trimmed');
   });
 
   it('refreshes the status bar if the DOM node is removed', () => {
@@ -97,14 +97,14 @@ describe('status bar behavior', () => {
 
     vi.advanceTimersByTime(TIMING.STATUS_BAR_THROTTLE_MS);
 
-    const bar = document.getElementById('lightsession-status-bar');
+    const bar = document.getElementById('Ebbli-status-bar');
     expect(bar).not.toBeNull();
     bar?.remove();
 
     refreshStatusBar();
 
-    const refreshed = document.getElementById('lightsession-status-bar');
+    const refreshed = document.getElementById('Ebbli-status-bar');
     expect(refreshed).not.toBeNull();
-    expect(refreshed?.textContent).toBe('LightSession · last 2 · 2 trimmed');
+    expect(refreshed?.textContent).toBe('Ebbli · last 2 · 2 trimmed');
   });
 });
