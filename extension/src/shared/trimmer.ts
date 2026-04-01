@@ -1,5 +1,5 @@
 /**
- * LightSession for ChatGPT - Trimming Logic
+ * Ebbli - Trimming Logic
  *
  * Core algorithm for trimming ChatGPT conversation data.
  * Extracted for testability and reuse.

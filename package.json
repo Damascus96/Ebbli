@@ -1,8 +1,8 @@
 {
-  "name": "light-session",
-  "version": "1.7.3",
+  "name": "Ebbli",
+  "version": "1",
   "type": "module",
-  "description": "LightSession Pro - Browser extension to optimize ChatGPT performance",
+  "description": "Ebbli - Keep ChatGPT flow moving fast.",
   "engines": {
     "node": ">=24.10.0"
   },
@@ -26,7 +26,7 @@
     "dev": "npm run build:firefox && web-ext run --source-dir=extension --firefox=firefoxdeveloperedition --start-url='https://chat.openai.com'",
     "dev:stable": "npm run build:firefox && web-ext run --source-dir=extension --firefox=firefox --start-url='https://chat.openai.com'",
     "package": "npm run build:prod:firefox && web-ext build --source-dir=extension --artifacts-dir=web-ext-artifacts",
-    "package:chrome": "npm run build:prod:chrome && cd extension && zip -r ../web-ext-artifacts/lightsession-chrome.zip . -x '*.ts' -x 'src/*' -x 'manifest.*.json'",
+    "package:chrome": "npm run build:prod:chrome && cd extension && zip -r ../web-ext-artifacts/Ebbli-chrome.zip . -x '*.ts' -x 'src/*' -x 'manifest.*.json'",
     "clean": "rm -rf extension/dist extension/popup/popup.js web-ext-artifacts"
   },
   "keywords": [
@@ -46,7 +46,7 @@
     "performance-optimization",
     "lag-fix"
   ],
-  "author": "LightSession Contributors",
+  "author": "Ebbli Contributors",
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.39.2",

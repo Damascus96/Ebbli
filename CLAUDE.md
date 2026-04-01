@@ -51,7 +51,7 @@ content.ts → dispatches settings via CustomEvent → receives status updates
 ### Message-Based Counting
 
 ChatGPT creates multiple nodes per assistant response (especially with Extended Thinking).
-LightSession Pro counts **messages** (role changes) instead of nodes:
+Ebbli counts **messages** (role changes) instead of nodes:
 - `[user, assistant, assistant, user, assistant]` = 4 messages
 - Consecutive same-role nodes are aggregated as ONE message
 - HIDDEN_ROLES: `system`, `tool`, `thinking` excluded from count
@@ -78,4 +78,4 @@ build.cjs                  # esbuild build script (supports --target=firefox|chr
 - ES modules (`"type": "module"` in package.json)
 - ESLint 9 flat config (`eslint.config.js`)
 - Strict TypeScript (`noUncheckedIndexedAccess: true`)
-- Prefix logs with `[LS:DEBUG]`, `[LS:INFO]`, `[LS:WARN]`, `[LS:ERROR]`
+- Prefix logs with `[EB:DEBUG]`, `[EB:INFO]`, `[EB:WARN]`, `[EB:ERROR]`

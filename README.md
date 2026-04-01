@@ -1,19 +1,17 @@
-# ⚡ LightSession for ChatGPT
+# ⚡ Ebbli
 
 Keep ChatGPT fast by keeping only the last N messages in the DOM.
 Local-only, privacy-first browser extension that fixes UI lag in long conversations.
 
-[![Firefox Add-on](https://img.shields.io/amo/v/lightsession-for-chatgpt?label=Firefox%20Add-on)](https://addons.mozilla.org/en-US/firefox/addon/lightsession-for-chatgpt/)
-[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/cenmillohidhjjjjiocmddkgmlonaigp?label=Chrome%20Web%20Store)](https://chromewebstore.google.com/detail/lightsession-pro/cenmillohidhjjjjiocmddkgmlonaigp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 ---
 
-## 🤔 Why LightSession?
+## 🤔 Why Ebbli?
 
 Long ChatGPT threads are brutal for the browser: the UI keeps every message in the DOM and the tab slowly turns into molasses — scroll becomes choppy, typing lags, devtools crawl.
 
-**LightSession** fixes that by intercepting API responses and trimming conversation data *before* React renders it, keeping the actual conversation intact on OpenAI's side.
+**Ebbli** fixes that by intercepting API responses and trimming conversation data *before* React renders it, keeping the actual conversation intact on OpenAI's side.
 
 - **Fixes UI lag** in long chats
 - **Keeps model context intact** (only the DOM is trimmed)
@@ -55,28 +53,11 @@ Built after too many coding sessions where a single ChatGPT tab would start eati
 
 ---
 
-## 📦 Install
-
-### Firefox
-
-**[Install from Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/lightsession-for-chatgpt/)**
-
-### Chrome
-
-**[Install from Chrome Web Store](https://chromewebstore.google.com/detail/lightsession-pro/cenmillohidhjjjjiocmddkgmlonaigp)**
-
-### After installation
-
-1. Open any ChatGPT conversation.
-2. Click the LightSession icon in your browser toolbar.
-3. Make sure the extension is **enabled**.
-4. Adjust how many messages to keep if needed.
-
 ### Manual install (development)
 
 ```bash
-git clone https://github.com/11me/light-session.git
-cd light-session
+git clone https://github.com/Damascus96/Ebbli.git
+cd Ebbli
 npm install
 
 # Build for Firefox
@@ -104,7 +85,7 @@ npm run build:chrome
 ### Basic usage
 
 1. Open a long ChatGPT conversation (or create one).
-2. Click the LightSession toolbar icon.
+2. Click the Ebbli toolbar icon.
 3. Ensure **Extension enabled** is checked. Trimming will now happen automatically.
 4. Use the slider to choose how many of the most recent messages to keep (1–100).
 
@@ -133,7 +114,7 @@ When you want to see the full history again:
 
 ### Does this reduce the model's context?
 
-No. LightSession only trims the **DOM** (what the browser renders), not the data stored by OpenAI.
+No. Ebbli only trims the **DOM** (what the browser renders), not the data stored by OpenAI.
 
 - The conversation on OpenAI's servers remains intact.
 - Reloading the page (or using **Refresh** in the popup) restores the full history.
@@ -148,7 +129,7 @@ Yes:
 
 ### What happens if ChatGPT's UI changes?
 
-LightSession uses a multi-tier selector strategy and conservative fallbacks, but a major UI redesign may temporarily break trimming. In that case:
+Ebbli uses a multi-tier selector strategy and conservative fallbacks, but a major UI redesign may temporarily break trimming. In that case:
 
 - The extension will simply stop trimming (fail-safe).
 - Your conversations will continue to work as usual.
@@ -158,7 +139,7 @@ LightSession uses a multi-tier selector strategy and conservative fallbacks, but
 
 ## 🔧 How it works
 
-LightSession uses a **Fetch Proxy** architecture:
+Ebbli uses a **Fetch Proxy** architecture:
 
 1. **Injection** – at `document_start`, injects a script into the page context before ChatGPT loads.
 2. **Interception** – patches `window.fetch` to intercept `/backend-api/` JSON responses.
@@ -252,15 +233,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## ❤️ Support
 
-- **Issues:** [GitHub Issues](https://github.com/11me/light-session/issues)
-
-If you find this extension useful, you can support ongoing development:
-
-| Currency | Address |
-|----------|---------|
-| BTC | `bc1qjs07p0qpa2taaje0044yhjry48qps4dseny4kd` |
-| ETH | `0x044ffd952D8525bC69E4d5e32267E9a6bac36510` |
-| SOL | `9nP1soTcZspCi2K1WWE9N7PkKPMA3eFgsdZ61vrCCKGZ` |
+- **Issues:** [GitHub Issues](https://github.com/Damascus96/Ebbli)
 
 ---
 

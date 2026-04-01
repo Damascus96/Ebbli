@@ -170,11 +170,11 @@ This watches for changes and auto-reloads the extension.
 Enable debug mode in the popup to see detailed logs:
 
 ```
-[LS:DEBUG] evaluateTrim called
-[LS:DEBUG] Settings: enabled=true, keep=10
-[LS:DEBUG] Building active thread...
-[LS:DEBUG] Built thread with 25 nodes
-[LS:INFO] Executing trim: Removing 15 nodes (keeping 10)
+[EB:DEBUG] evaluateTrim called
+[EB:DEBUG] Settings: enabled=true, keep=10
+[EB:DEBUG] Building active thread...
+[EB:DEBUG] Built thread with 25 nodes
+[EB:INFO] Executing trim: Removing 15 nodes (keeping 10)
 ```
 
 ## npm Scripts
@@ -199,10 +199,10 @@ Enable debug mode in the popup to see detailed logs:
 
 ## Settings Schema
 
-Settings are stored in `browser.storage.local` under the key `ls_settings`:
+Settings are stored in `browser.storage.local` under the key `eb_settings`:
 
 ```typescript
-interface LsSettings {
+interface EbSettings {
   version: 1;           // Schema version for migrations
   enabled: boolean;     // Master toggle
   keep: number;         // Messages to keep (1-100)
@@ -217,8 +217,8 @@ Default values are defined in `shared/constants.ts`.
 
 The status bar is a floating pill in the bottom-right corner:
 
-- **Green**: Actively trimming (`LightSession · last 10 · 17 trimmed`)
-- **Gray**: Waiting or all visible (`LightSession · all 5 visible`)
+- **Green**: Actively trimming (`Ebbli · last 10 · 17 trimmed`)
+- **Gray**: Waiting or all visible (`Ebbli · all 5 visible`)
 
 Position: `bottom: 50px`, `right: 24px`
 
@@ -230,7 +230,7 @@ The accumulated trim count persists during the session and resets on:
 
 ### Adding a New Setting
 
-1. Add to `LsSettings` interface in `shared/types.ts`
+1. Add to `EbSettings` interface in `shared/types.ts`
 2. Add default value in `shared/constants.ts`
 3. Add validation in `shared/storage.ts`
 4. Add UI control in `popup/popup.html`
@@ -266,7 +266,7 @@ The extension uses a tiered selector approach:
 ### Trimming not working
 
 1. Enable debug mode
-2. Check console for `[LS:*]` logs
+2. Check console for `[EB:*]` logs
 3. Common issues:
    - Conversation root not found (selector mismatch)
    - Streaming detected (waits for completion)
@@ -276,7 +276,7 @@ The extension uses a tiered selector approach:
 
 - Check `showStatusBar` setting is enabled
 - Verify content script is running (check console)
-- Inspect DOM for `#lightsession-status-bar` element
+- Inspect DOM for `#ebbi-status-bar` element
 
 ## Release Process
 
@@ -299,7 +299,7 @@ The following secrets must be configured in the repository settings:
 
 | Secret | Description |
 |--------|-------------|
-| `FIREFOX_ADDON_ID` | AMO extension ID (e.g., `lightsession@example.com`) |
+| `FIREFOX_ADDON_ID` | AMO extension ID (e.g., `ebbli@example.com`) |
 | `FIREFOX_API_ISSUER` | JWT issuer from AMO API credentials |
 | `FIREFOX_API_SECRET` | JWT secret from AMO API credentials |
 

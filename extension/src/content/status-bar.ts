@@ -1,12 +1,12 @@
 /**
- * LightSession for ChatGPT - Status Bar
+ * Ebbli for ChatGPT - Status Bar
  * Compact floating pill indicator showing trimming statistics
  */
 
 import { TIMING } from '../shared/constants';
 
-const STATUS_BAR_ID = 'lightsession-status-bar';
-const WAITING_TEXT = 'LightSession · waiting for messages…';
+const STATUS_BAR_ID = 'Ebbli-status-bar';
+const WAITING_TEXT = 'Ebbli · waiting for messages…';
 
 export interface StatusBarStats {
   totalMessages: number;
@@ -54,17 +54,19 @@ function applyStatusBarStyles(bar: HTMLElement): void {
     position: 'fixed',
     bottom: '3.5px',
     right: '24px',
-    zIndex: '10000',
-    padding: '4px 10px',
-    fontSize: '11px',
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-    fontWeight: '500',
-    color: '#e5e7eb',
-    backgroundColor: 'rgba(15, 23, 42, 0.9)',
-    border: '1px solid rgba(55, 65, 81, 0.9)',
+    zIndex: '2147483647',
+    padding: '4px 12px',
+    fontSize: '10px',
+    fontFamily: '"Josefin Sans", "Segoe UI", sans-serif',
+    fontWeight: '300',
+    letterSpacing: '0.12em',
+    textTransform: 'uppercase',
+    color: '#9aaa90',                             // text-2 sage
+    backgroundColor: 'rgba(19, 31, 16, 0.92)',   // bg forest green
+    border: '1px solid rgba(255, 255, 255, 0.08)',
     borderRadius: '9999px',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
-    backdropFilter: 'blur(4px)',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.5)',
+    backdropFilter: 'blur(6px)',
     maxWidth: '60%',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
@@ -80,27 +82,27 @@ function applyStatusBarStyles(bar: HTMLElement): void {
 function getStatusText(stats: StatusBarStats): { text: string; state: StatusBarState } {
   if (stats.trimmedMessages > 0) {
     return {
-      text: `LightSession · last ${stats.keepLastN} · ${stats.trimmedMessages} trimmed`,
+      text: `Ebbli · last ${stats.keepLastN} · ${stats.trimmedMessages} trimmed`,
       state: 'active',
     };
   }
 
   if (stats.totalMessages === 0) {
     return {
-      text: 'LightSession · waiting for messages…',
+      text: 'Ebbli · waiting for messages…',
       state: 'waiting',
     };
   }
 
   if (stats.totalMessages <= stats.keepLastN) {
     return {
-      text: `LightSession · all ${stats.totalMessages} visible`,
+      text: `Ebbli · all ${stats.totalMessages} visible`,
       state: 'all-visible',
     };
   }
 
   return {
-    text: `LightSession · ${stats.visibleMessages} visible`,
+    text: `Ebbli · ${stats.visibleMessages} visible`,
     state: 'active',
   };
 }
@@ -109,28 +111,28 @@ function getStatusText(stats: StatusBarStats): { text: string; state: StatusBarS
  * Apply state-specific styling
  */
 function applyStateStyles(bar: HTMLElement, state: StatusBarState): void {
-  // Reset to default
+  // Reset to Hiraeth House defaults
   bar.style.opacity = '1';
-  bar.style.color = '#e5e7eb';
-  bar.style.backgroundColor = 'rgba(15, 23, 42, 0.9)';
-  bar.style.borderColor = 'rgba(55, 65, 81, 0.9)';
+  bar.style.color = '#9aaa90';                              // text-2 sage
+  bar.style.backgroundColor = 'rgba(19, 31, 16, 0.92)';   // bg forest green
+  bar.style.borderColor = 'rgba(255, 255, 255, 0.08)';
 
   switch (state) {
     case 'active':
-      bar.style.color = '#6ee7b7';
-      bar.style.backgroundColor = 'rgba(6, 78, 59, 0.9)';
-      bar.style.borderColor = 'rgba(16, 185, 129, 0.5)';
+      bar.style.color = '#00C2A0';                          // teal
+      bar.style.backgroundColor = 'rgba(19, 31, 16, 0.92)';
+      bar.style.borderColor = 'rgba(0, 194, 160, 0.22)';   // teal-border
       break;
     case 'waiting':
-      bar.style.color = '#9ca3af';
+      bar.style.color = '#5a7a50';                          // text-3 dark sage
       break;
     case 'all-visible':
       // Keep neutral styling
       break;
     case 'unrecognized':
-      bar.style.color = '#fcd34d';
-      bar.style.backgroundColor = 'rgba(120, 53, 15, 0.9)';
-      bar.style.borderColor = 'rgba(217, 119, 6, 0.5)';
+      bar.style.color = '#F0AD4E';                          // amber
+      bar.style.backgroundColor = 'rgba(19, 31, 16, 0.92)';
+      bar.style.borderColor = 'rgba(240, 173, 78, 0.25)';
       break;
   }
 }
@@ -229,7 +231,7 @@ export function showLayoutNotRecognized(): void {
     return;
   }
 
-  bar.textContent = 'LightSession · layout not recognized';
+  bar.textContent = 'Ebbli · layout not recognized';
   applyStateStyles(bar, 'unrecognized');
 }
 

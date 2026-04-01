@@ -1,10 +1,10 @@
 /**
- * LightSession Pro - Popup UI Logic
+ * Ebbli - Popup UI Logic
  * Settings interface and interaction handlers
  */
 
 import browser from '../shared/browser-polyfill';
-import type { LsSettings } from '../shared/types';
+import type { EbSettings } from '../shared/types';
 import { sendMessageWithTimeout } from '../shared/messages';
 import { SUPPORT_URL } from '../shared/constants';
 
@@ -219,7 +219,7 @@ async function initialize(): Promise<void> {
  */
 async function loadSettings(): Promise<void> {
   try {
-    const response = await sendMessageWithTimeout<{ settings: LsSettings }>({
+    const response = await sendMessageWithTimeout<{ settings: EbSettings }>({
       type: 'GET_SETTINGS',
     });
 
@@ -254,7 +254,7 @@ async function loadSettings(): Promise<void> {
  * Update settings in background script
  */
 async function updateSettings(
-  updates: Partial<Omit<LsSettings, 'version'>>,
+  updates: Partial<Omit<EbSettings, 'version'>>,
   options: { silent?: boolean } = {}
 ): Promise<void> {
   try {

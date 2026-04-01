@@ -1,27 +1,27 @@
 /**
- * LightSession Pro - Storage Utility
+ * Ebbli - Storage Utility
  * Settings persistence and validation
  */
 
 import browser from './browser-polyfill';
-import type { LsSettings } from './types';
+import type { EbSettings } from './types';
 import { DEFAULT_SETTINGS, VALIDATION } from './constants';
 import { logDebug, logError } from './logger';
 
-export const STORAGE_KEY = 'ls_settings';
+export const STORAGE_KEY = 'eb_settings';
 
 /**
  * localStorage key for page-script access.
  * Page scripts can't access browser.storage, so we mirror settings here
  * to avoid race conditions on page load.
  */
-export const LOCAL_STORAGE_KEY = 'ls_config';
+export const LOCAL_STORAGE_KEY = 'eb_config';
 
 /**
  * Validate and normalize settings object
  * Ensures all fields are present and values are in valid ranges
  */
-export function validateSettings(input: Partial<LsSettings>): LsSettings {
+export function validateSettings(input: Partial<EbSettings>): EbSettings {
   return {
     version: 1, // Always current version
     enabled: input.enabled ?? DEFAULT_SETTINGS.enabled,
@@ -42,7 +42,7 @@ export function validateSettings(input: Partial<LsSettings>): LsSettings {
  * so we mirror the config they need (enabled, limit, debug) to localStorage.
  * This eliminates race conditions on page load.
  */
-export function syncToLocalStorage(settings: LsSettings): void {
+export function syncToLocalStorage(settings: EbSettings): void {
   // Guard: localStorage unavailable in service worker (Chrome MV3)
   if (typeof localStorage === 'undefined') {
     logDebug('localStorage not available (service worker context)');
@@ -68,10 +68,10 @@ export function syncToLocalStorage(settings: LsSettings): void {
  * Load settings from browser.storage.local
  * Returns validated settings (falls back to defaults on error)
  */
-export async function loadSettings(): Promise<LsSettings> {
+export async function loadSettings(): Promise<EbSettings> {
   try {
     const result = await browser.storage.local.get(STORAGE_KEY);
-    const stored = result[STORAGE_KEY] as Partial<LsSettings> | undefined;
+    const stored = result[STORAGE_KEY] as Partial<EbSettings> | undefined;
 
     if (stored) {
       logDebug('Loaded settings from storage:', stored);
@@ -91,7 +91,7 @@ export async function loadSettings(): Promise<LsSettings> {
  * Update settings in browser.storage.local (partial update)
  * Merges provided fields with existing settings
  */
-export async function updateSettings(updates: Partial<Omit<LsSettings, 'version'>>): Promise<void> {
+export async function updateSettings(updates: Partial<Omit<EbSettings, 'version'>>): Promise<void> {
   try {
     // Load current settings
     const current = await loadSettings();

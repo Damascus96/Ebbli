@@ -1,18 +1,18 @@
 /**
- * LightSession for ChatGPT - Constants
+ * Ebbli - Constants
  * All magic numbers, timing values, and selector definitions
  */
 
-import type { LsSettings } from './types';
+import type { EbSettings } from './types';
 
 // ============================================================================
 // Default Settings
 // ============================================================================
 
-export const DEFAULT_SETTINGS: Readonly<LsSettings> = {
+export const DEFAULT_SETTINGS: Readonly<EbSettings> = {
   version: 1,
   enabled: true,
-  keep: 10,
+  keep: 20,
   showStatusBar: true,
   collapseLongUserMessages: true,
   debug: false,
@@ -65,7 +65,6 @@ export const TIMING = {
    * Rationale:
    * - Empirically tuned: ~2ms average per node removal (DOM mutation + repaint)
    * - 7 nodes * 2ms = ~14ms < 16ms budget with small margin
-   * - Tested on M1 Mac and older Windows laptops
    * - Lower values increase latency; higher values risk frame drops
    */
   NODES_PER_BATCH: 7,
@@ -126,7 +125,7 @@ export const TIMING = {
 // Logging Constants
 // ============================================================================
 
-export const LOG_PREFIX = 'LS:' as const;
+export const LOG_PREFIX = 'EB:' as const;
 
 // ============================================================================
 // Validation Ranges
@@ -148,4 +147,4 @@ export const VALIDATION = {
 // External URLs
 // ============================================================================
 
-export const SUPPORT_URL = 'https://github.com/11me/light-session?tab=readme-ov-file#%EF%B8%8F-support' as const;
+export const SUPPORT_URL = 'https://github.com/Damascus96/Ebbli' as const;

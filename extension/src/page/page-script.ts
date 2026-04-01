@@ -1,5 +1,5 @@
 /**
- * LightSession for ChatGPT - Page Script (Fetch Proxy)
+ * Ebbli - Page Script (Fetch Proxy)
  *
  * This script runs in the page context (not content script isolated world).
  * It patches window.fetch to intercept ChatGPT API responses and trim
@@ -24,7 +24,7 @@ import type { TrimStatus } from '../shared/types';
 // Types (Page Context Only)
 // ============================================================================
 
-interface LsConfig {
+interface EbbliConfig {
   enabled: boolean;
   limit: number;
   debug: boolean;
@@ -36,13 +36,13 @@ interface LsConfig {
 
 declare global {
   interface Window {
-    __LS_CONFIG__?: LsConfig;
-    __LS_PROXY_PATCHED__?: boolean;
-    __LS_DEBUG__?: boolean;
+    __Ebbli_CONFIG__?: EbbliConfig;
+    __Ebbli_PROXY_PATCHED__?: boolean;
+    __Ebbli_DEBUG__?: boolean;
   }
 }
 
-const DEFAULT_CONFIG: LsConfig = {
+const DEFAULT_CONFIG: EbbliConfig = {
   enabled: true,
   limit: 10,
   debug: false,
@@ -97,18 +97,18 @@ const configStartTime = Date.now();
 /**
  * localStorage key - must match storage.ts LOCAL_STORAGE_KEY
  */
-const LOCAL_STORAGE_KEY = 'ls_config';
+const LOCAL_STORAGE_KEY = 'ebbli_config';
 
 /**
  * Load config from localStorage (synced by content script).
  * This eliminates race conditions where fetch happens before
  * content script can send config via CustomEvent.
  */
-function loadFromLocalStorage(): LsConfig | null {
+function loadFromLocalStorage(): EbbliConfig | null {
   try {
     const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (stored) {
-      const parsed = JSON.parse(stored) as Partial<LsConfig>;
+      const parsed = JSON.parse(stored) as Partial<EbbliConfig>;
       configReceived = true;
       return {
         enabled: parsed.enabled ?? DEFAULT_CONFIG.enabled,
@@ -127,8 +127,8 @@ function loadFromLocalStorage(): LsConfig | null {
 // ============================================================================
 
 function log(...args: unknown[]): void {
-  if (window.__LS_DEBUG__) {
-    console.log('[LS:PageScript]', ...args);
+  if (window.__Ebbli_DEBUG__) {
+    console.log('[Ebbli:PageScript]', ...args);
   }
 }
 
@@ -142,7 +142,7 @@ function log(...args: unknown[]): void {
  */
 function dispatchStatus(status: TrimStatus): void {
   window.dispatchEvent(
-    new CustomEvent('lightsession-status', { detail: status })
+    new CustomEvent('Ebbli-status', { detail: status })
   );
 }
 
@@ -153,18 +153,18 @@ function dispatchStatus(status: TrimStatus): void {
 /**
  * Get current config (with defaults)
  */
-function getConfig(): LsConfig {
+function getConfig(): EbbliConfig {
   // Always check localStorage first (source of truth, synced by content scripts)
   // This ensures we pick up settings even if they were synced after page-script loaded
   const stored = loadFromLocalStorage();
   if (stored) {
     // Update window cache for consistency
-    window.__LS_CONFIG__ = stored;
+    window.__Ebbli_CONFIG__ = stored;
     return stored;
   }
   
   // Fall back to window config (set by content script events)
-  const cfg = window.__LS_CONFIG__;
+  const cfg = window.__Ebbli_CONFIG__;
   if (cfg) {
     configReceived = true;
     return {
@@ -383,7 +383,7 @@ async function interceptedFetch(
  */
 function patchFetch(): void {
   // Prevent double-patching
-  if (window.__LS_PROXY_PATCHED__) {
+  if (window.__Ebbli_PROXY_PATCHED__) {
     log('Already patched, skipping');
     return;
   }
@@ -394,15 +394,15 @@ function patchFetch(): void {
     return interceptedFetch(nativeFetch, ...args);
   };
 
-  window.__LS_PROXY_PATCHED__ = true;
+  window.__Ebbli_PROXY_PATCHED__ = true;
   log('Fetch proxy installed');
 
   // Notify content script that proxy is ready (use origin for security)
-  window.postMessage({ type: 'lightsession-proxy-ready' }, location.origin);
+  window.postMessage({ type: 'Ebbli-proxy-ready' }, location.origin);
 
   // Request config from content script (handles race condition where
   // content script may have loaded before page script sent ready signal)
-  window.dispatchEvent(new CustomEvent('lightsession-request-config'));
+  window.dispatchEvent(new CustomEvent('Ebbli-request-config'));
 }
 
 /**
@@ -410,35 +410,35 @@ function patchFetch(): void {
  * Config is received as JSON string for cross-browser compatibility.
  */
 function setupConfigListener(): void {
-  window.addEventListener('lightsession-config', ((event: CustomEvent<string>) => {
+  window.addEventListener('Ebbli-config', ((event: CustomEvent<string>) => {
     const detail = event.detail;
 
     // Parse JSON string (content script serializes config for Chrome compatibility)
-    let config: LsConfig | null = null;
+    let config: EbbliConfig | null = null;
 
     if (typeof detail === 'string') {
       try {
-        config = JSON.parse(detail) as LsConfig;
+        config = JSON.parse(detail) as EbbliConfig;
       } catch {
         // Invalid JSON, ignore
         return;
       }
     } else if (detail && typeof detail === 'object') {
       // Fallback: handle object directly (backwards compatibility)
-      config = detail as unknown as LsConfig;
+      config = detail as unknown as EbbliConfig;
     }
 
     if (config && typeof config === 'object') {
       configReceived = true;
       // Update debug flag first so logging works immediately
-      window.__LS_DEBUG__ = config.debug ?? false;
+      window.__Ebbli_DEBUG__ = config.debug ?? false;
 
-      window.__LS_CONFIG__ = {
+      window.__Ebbli_CONFIG__ = {
         enabled: config.enabled ?? DEFAULT_CONFIG.enabled,
         limit: Math.max(1, config.limit ?? DEFAULT_CONFIG.limit),
         debug: config.debug ?? DEFAULT_CONFIG.debug,
       };
-      log('Config updated:', window.__LS_CONFIG__);
+      log('Config updated:', window.__Ebbli_CONFIG__);
 
       // Signal that config is ready (unblocks first fetch)
       tryResolveConfigReady();
@@ -452,15 +452,15 @@ function setupConfigListener(): void {
 
 (function init(): void {
   // Initialize debug flag
-  if (typeof window.__LS_DEBUG__ === 'undefined') {
-    window.__LS_DEBUG__ = false;
+  if (typeof window.__Ebbli_DEBUG__ === 'undefined') {
+    window.__Ebbli_DEBUG__ = false;
   }
 
   // Check localStorage first - if already synced by page-inject, resolve immediately
   const stored = loadFromLocalStorage();
   if (stored) {
-    window.__LS_CONFIG__ = stored;
-    window.__LS_DEBUG__ = stored.debug;
+    window.__Ebbli_CONFIG__ = stored;
+    window.__Ebbli_DEBUG__ = stored.debug;
     tryResolveConfigReady();
   }
 

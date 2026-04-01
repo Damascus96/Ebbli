@@ -3,10 +3,10 @@
  *
  * The content script can observe `window` errors/rejections originating from the page.
  * Calling `preventDefault()` on these events suppresses the browser's default reporting,
- * so we must only suppress errors that are clearly caused by LightSession itself.
+ * so we must only suppress errors that are clearly caused by Ebbli itself.
  */
 
-export function isLightSessionRejection(
+export function isEbbliRejection(
   reason: unknown,
   extensionUrlPrefix?: string,
 ): boolean {

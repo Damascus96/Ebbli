@@ -1,5 +1,5 @@
 /**
- * LightSession for ChatGPT - Shared Type Definitions
+ * Ebbli - Shared Type Definitions
  * All core interfaces and type definitions used across the extension
  */
 
@@ -7,14 +7,14 @@
 // Settings Schema (Persistent State)
 // ============================================================================
 
-export interface LsSettings {
+export interface EbSettings {
   version: 1; // Schema version for future migrations
   enabled: boolean; // Toggle trimming on/off
   keep: number; // Message retention limit (1-100)
   showStatusBar: boolean; // Show in-page status bar with trimming stats
   collapseLongUserMessages: boolean; // Collapse long user messages in UI (presentation-only)
   debug: boolean; // Enable debug logging
-  ultraLean: boolean; // Enable aggressive performance optimizations (adds .ls-ultra-lean class)
+  ultraLean: boolean; // Enable aggressive performance optimizations (adds .eb-ultra-lean class)
 }
 
 // ============================================================================
@@ -47,7 +47,7 @@ export interface GetSettingsMessage {
  * Response containing current settings
  */
 export interface GetSettingsResponse {
-  settings: LsSettings;
+  settings: EbSettings;
 }
 
 /**
@@ -55,7 +55,7 @@ export interface GetSettingsResponse {
  */
 export interface SetSettingsMessage {
   type: 'SET_SETTINGS';
-  payload: Partial<Omit<LsSettings, 'version'>>;
+  payload: Partial<Omit<EbSettings, 'version'>>;
 }
 
 /**

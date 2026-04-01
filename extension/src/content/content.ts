@@ -1,5 +1,5 @@
 /**
- * LightSession for ChatGPT - Content Script
+ * Ebbli - Content Script
  *
  * Simplified content script that works with the Fetch Proxy (page-script.ts).
  * Responsibilities:
@@ -22,7 +22,7 @@ import {
 } from './status-bar';
 import { isEmptyChatView } from './chat-view';
 import { installUserCollapse, type UserCollapseController } from './user-collapse';
-import { isLightSessionRejection } from './rejection-filter';
+import { isEbbliRejection } from './rejection-filter';
 
 
 // ============================================================================
@@ -67,7 +67,7 @@ let userCollapse: UserCollapseController | null = null;
 
 /**
  * Dispatch configuration to the page script via CustomEvent.
- * The page script listens for 'lightsession-config' events.
+ * The page script listens for 'Ebbli-config' events.
  *
  * Cross-browser compatibility:
  * - Firefox: Content scripts run in an isolated sandbox (Xray vision).
@@ -92,7 +92,7 @@ function dispatchConfig(settings: LsSettings): void {
   // JSON string is safely passed as a primitive
   const jsonString = JSON.stringify(config);
 
-  window.dispatchEvent(new CustomEvent('lightsession-config', { detail: jsonString }));
+  window.dispatchEvent(new CustomEvent('Ebbli-config', { detail: jsonString }));
 
   logDebug('Dispatched config to page script:', config);
 }
@@ -263,7 +263,7 @@ function setupNavigationDetection(): void {
 
   // Patch history methods for SPA navigation detection
   // Guard against double patching (e.g. extension reload / unexpected reinjection).
-  const PATCH_FLAG = '__lightsession_patched_history__';
+  const PATCH_FLAG = '__Ebbli_patched_history__';
   const patchScope = window as unknown as Record<string, unknown>;
   if (patchScope[PATCH_FLAG] === true) return;
   patchScope[PATCH_FLAG] = true;
@@ -341,7 +341,7 @@ function setupEmptyChatObserver(): void {
  */
 function setupEventListeners(): void {
   // Listen for trim status from page script
-  window.addEventListener('lightsession-status', ((event: CustomEvent<unknown>) => {
+  window.addEventListener('Ebbli-status', ((event: CustomEvent<unknown>) => {
     handleTrimStatus(event);
   }) as EventListener);
 
@@ -351,13 +351,13 @@ function setupEventListeners(): void {
     if (event.origin !== location.origin) return;
 
     const data = event.data as { type?: string } | null;
-    if (data?.type === 'lightsession-proxy-ready') {
+    if (data?.type === 'Ebbli-proxy-ready') {
       handleProxyReady();
     }
   });
 
   // Listen for config request from page script (handles race condition)
-  window.addEventListener('lightsession-request-config', () => {
+  window.addEventListener('Ebbli-request-config', () => {
     if (currentSettings) {
       dispatchConfig(currentSettings);
     }
@@ -372,7 +372,7 @@ function setupEventListeners(): void {
  */
 async function initialize(): Promise<void> {
   try {
-    logInfo('LightSession content script initializing...');
+    logInfo('Ebbli content script initializing...');
 
     // Set up event listeners first (before settings load)
     setupEventListeners();
@@ -396,7 +396,7 @@ async function initialize(): Promise<void> {
     // Check proxy status after a short delay
     setTimeout(checkProxyStatus, TIMING.PROXY_READY_TIMEOUT_MS);
 
-    logInfo('LightSession content script initialized');
+    logInfo('Ebbli content script initialized');
   } catch (error) {
     logError('Failed to initialize:', error);
   }
@@ -427,7 +427,7 @@ if (document.readyState === 'loading') {
  * Global error handler to prevent extension errors from breaking the page
  */
 window.addEventListener('error', (event) => {
-  if (event.message?.includes('LS:') || event.filename?.includes('light-session')) {
+  if (event.message?.includes('LS:') || event.filename?.includes('Ebbli')) {
     logError('Unhandled error:', event.error || event.message);
     event.preventDefault();
   }
@@ -441,9 +441,9 @@ window.addEventListener('unhandledrejection', (event) => {
     extensionUrlPrefix = undefined;
   }
 
-  // Do not suppress site (ChatGPT) errors. Only suppress if it clearly originates from LightSession.
-  const strictIsOurs = isLightSessionRejection(event.reason, extensionUrlPrefix);
-  const looseIsOurs = isLightSessionRejection(event.reason);
+  // Do not suppress site (ChatGPT) errors. Only suppress if it clearly originates from Ebbli.
+  const strictIsOurs = isEbbliRejection(event.reason, extensionUrlPrefix);
+  const looseIsOurs = isEbbliRejection(event.reason);
 
   if (strictIsOurs || looseIsOurs) {
     logError('Unhandled promise rejection:', event.reason);

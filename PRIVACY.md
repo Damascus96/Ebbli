@@ -1,12 +1,12 @@
 # Privacy Policy
 
-**LightSession for ChatGPT** is a privacy-first browser extension. This policy explains what data the extension accesses and how it is handled.
+**Ebbli** is a privacy-first browser extension. This policy explains what data the extension accesses and how it is handled.
 
 ## Data Collection
 
 **We do not collect any data.**
 
-LightSession operates entirely locally in your browser. It does not:
+Ebbli operates entirely locally in your browser. It does not:
 
 - Collect personal information
 - Track your browsing activity
@@ -24,7 +24,7 @@ LightSession operates entirely locally in your browser. It does not:
 
 ## How It Works
 
-LightSession intercepts ChatGPT's API responses **locally in your browser** and trims the conversation data before React renders it. This keeps the UI fast without modifying your actual conversation on OpenAI's servers.
+Ebbli intercepts ChatGPT's API responses **locally in your browser** and trims the conversation data before React renders it. This keeps the UI fast without modifying your actual conversation on OpenAI's servers.
 
 All processing happens entirely within your browser. No data ever leaves your device.
 
@@ -34,8 +34,8 @@ This extension does not share any data with third parties because it does not co
 
 ## Open Source
 
-LightSession is open source. You can review the code at:
-https://github.com/11me/light-session
+Ebbli is open source. You can review the code at:
+https://github.com/Damascus96/Ebbli
 
 ## Contact
 

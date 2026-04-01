@@ -1,5 +1,5 @@
 /**
- * LightSession Pro - Background Script
+ * Ebbli - Background Script
  * Manages settings and routes messages between content and popup scripts
  */
 
@@ -77,8 +77,8 @@ const messageHandler = createMessageHandler(
  * Listen for storage changes and propagate debug mode updates
  */
 browser.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName === 'local' && changes.ls_settings) {
-    const newSettings = changes.ls_settings.newValue as Record<string, unknown> | undefined;
+  if (areaName === 'local' && changes.ebbli_settings) {
+    const newSettings = changes.ebbli_settings.newValue as Record<string, unknown> | undefined;
     if (newSettings && typeof newSettings.debug === 'boolean') {
       setDebugMode(newSettings.debug);
       logDebug('Debug mode updated from storage change');

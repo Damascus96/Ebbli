@@ -1,5 +1,5 @@
 /**
- * LightSession for ChatGPT - Page Script Injector
+ * Ebbli - Page Script Injector
  *
  * This content script runs at document_start to:
  * 1. Sync settings from browser.storage to localStorage (for page-script access)
@@ -11,8 +11,8 @@
 
 import browser from '../shared/browser-polyfill';
 
-const STORAGE_KEY = 'ls_settings';
-const LOCAL_STORAGE_KEY = 'ls_config';
+const STORAGE_KEY = 'ebbli_settings';
+const LOCAL_STORAGE_KEY = 'ebbli_config';
 
 /**
  * Sync settings from browser.storage to localStorage AND dispatch CustomEvent.
@@ -33,7 +33,7 @@ async function syncSettingsToLocalStorage(): Promise<void> {
       // Write to localStorage for page-script access
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(config));
       // Dispatch event immediately - faster than waiting for content.ts (document_idle)
-      window.dispatchEvent(new CustomEvent('lightsession-config', { detail: JSON.stringify(config) }));
+      window.dispatchEvent(new CustomEvent('ebbli-config', { detail: JSON.stringify(config) }));
     }
   } catch {
     // Storage access failed - page-script will use defaults after timeout
@@ -46,6 +46,10 @@ async function syncSettingsToLocalStorage(): Promise<void> {
 function injectPageScript(): void {
   const script = document.createElement('script');
   script.src = browser.runtime.getURL('dist/page-script.js');
+  
+
+  // Ensure execution order before site scripts
+  script.async = false;
 
   const target = document.head || document.documentElement;
   target.insertBefore(script, target.firstChild);
@@ -55,7 +59,7 @@ function injectPageScript(): void {
   };
 
   script.onerror = (): void => {
-    console.error('[LightSession] Failed to load page script');
+    console.error('[Ebbli] Failed to load page script');
     script.remove();
   };
 }

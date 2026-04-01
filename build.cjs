@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Build script for LightSession Pro extension
+ * Build script for Ebbli extension
  * Bundles TypeScript → single JS files (no imports) for MV3 compatibility
  *
  * Usage:
@@ -39,15 +39,9 @@ function copyManifest() {
     fs.unlinkSync(manifestDest);
   }
 
-  if (target === 'chrome') {
-    // For Chrome, copy manifest.chrome.json
-    fs.copyFileSync(manifestSrc, manifestDest);
-    console.log(`✓ Copied manifest.${target}.json → manifest.json`);
-  } else {
-    // For Firefox, create symlink to manifest.firefox.json
-    fs.symlinkSync('manifest.firefox.json', manifestDest);
-    console.log('✓ Created symlink manifest.json → manifest.firefox.json');
-  }
+  // Copy manifest for both browsers (avoid Windows symlink issues)
+  fs.copyFileSync(manifestSrc, manifestDest);
+  console.log(`✓ Copied manifest.${target}.json → manifest.json`);
 }
 
 /**

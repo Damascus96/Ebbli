@@ -1,5 +1,5 @@
 /**
- * LightSession for ChatGPT - Logger Utility
+ * Ebbli - Logger Utility
  * Centralized logging with debug mode control
  */
 

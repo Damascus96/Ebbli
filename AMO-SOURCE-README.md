@@ -1,4 +1,4 @@
-# Source Code — LightSession Pro for ChatGPT
+# Source Code — Ebbli for ChatGPT
 
 This archive contains the complete source code for the submitted extension version.
 
@@ -20,7 +20,7 @@ This runs `NODE_ENV=production node build.cjs --target=firefox` which uses esbui
 
 ```bash
 cd extension
-zip -r ../light-session-firefox.zip manifest.json dist/ popup/ icons/ -x "*.map"
+zip -r ../Ebbli-firefox.zip manifest.json dist/ popup/ icons/ -x "*.map"
 ```
 
 ## Source layout

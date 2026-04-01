@@ -1,5 +1,5 @@
 /**
- * LightSession for ChatGPT - Collapse long user messages (presentation-only)
+ * Ebbli - Collapse long user messages (presentation-only)
  *
  * Constraints:
  * - Do not truncate or rewrite message text content (no innerHTML rewriting).
@@ -9,9 +9,9 @@
 
 import { logDebug, logWarn } from '../shared/logger';
 
-const STYLE_ID = 'lightsession-user-collapse-styles';
-const PROCESSED_ATTR = 'data-ls-uc-processed';
-const STATE_ATTR = 'data-ls-uc-state'; // "collapsed" | "expanded"
+const STYLE_ID = 'ebbli-user-collapse-styles';
+const PROCESSED_ATTR = 'data-ebbli-uc-processed';
+const STATE_ATTR = 'data-ebbli-uc-state'; // "collapsed" | "expanded"
 
 const USER_ROOT_SELECTOR = '[data-message-author-role="user"][data-message-id]';
 const ANY_ROLE_ROOT_SELECTOR = '[data-message-author-role][data-message-id]';
@@ -34,11 +34,11 @@ function ensureStyles(): void {
   const style = document.createElement('style');
   style.id = STYLE_ID;
   style.textContent = `
-/* LightSession: user message collapse */
-.ls-uc-bubble { position: relative; }
-.ls-uc-text { position: relative; }
+/* Ebbli: user message collapse */
+.ebbli-uc-bubble { position: relative; }
+.ebbli-uc-text { position: relative; }
 
-.ls-uc-toggle {
+.ebbli-uc-toggle {
   position: absolute;
   right: 10px;
   bottom: 8px;
@@ -55,28 +55,28 @@ function ensureStyles(): void {
   backdrop-filter: blur(6px);
   cursor: pointer;
 }
-.ls-uc-toggle:hover { background: rgba(255,255,255,.98); }
-.ls-uc-toggle:focus-visible {
+.ebbli-uc-toggle:hover { background: rgba(255,255,255,.98); }
+.ebbli-uc-toggle:focus-visible {
   outline: 2px solid rgba(37, 99, 235, .9);
   outline-offset: 2px;
 }
 
 /* Clamp only the text container */
-.ls-uc-bubble[${STATE_ATTR}="collapsed"] .ls-uc-text {
+.ebbli-uc-bubble[${STATE_ATTR}="collapsed"] .ebbli-uc-text {
   max-height: ${COLLAPSED_MAX_HEIGHT_PX}px;
   overflow: hidden;
 }
-.ls-uc-bubble[${STATE_ATTR}="expanded"] .ls-uc-text {
+.ebbli-uc-bubble[${STATE_ATTR}="expanded"] .ebbli-uc-text {
   max-height: 99999px; /* large so content isn't truncated; allows transition */
   overflow: visible;
 }
-.ls-uc-bubble .ls-uc-text { transition: max-height 180ms ease; }
+.ebbli-uc-bubble .ebbli-uc-text { transition: max-height 180ms ease; }
 @media (prefers-reduced-motion: reduce) {
-  .ls-uc-bubble .ls-uc-text { transition: none; }
+  .ebbli-uc-bubble .ebbli-uc-text { transition: none; }
 }
 
 /* Fade overlay (pseudo-element; pointer-events none) */
-.ls-uc-bubble[${STATE_ATTR}="collapsed"] .ls-uc-text::after {
+.ebbli-uc-bubble[${STATE_ATTR}="collapsed"] .ebbli-uc-text::after {
   content: "";
   position: absolute;
   left: 0;
@@ -84,7 +84,7 @@ function ensureStyles(): void {
   bottom: 0;
   height: 54px;
   pointer-events: none;
-  background: linear-gradient(to bottom, rgba(0,0,0,0), var(--ls-uc-fade-to, rgba(255,255,255,1)));
+  background: linear-gradient(to bottom, rgba(0,0,0,0), var(--ebbli-uc-fade-to, rgba(255,255,255,1)));
 }
 `;
   document.head.appendChild(style);
@@ -186,7 +186,7 @@ function preserveScrollAfterHeightChange(
 }
 
 function ensureButton(bubble: HTMLElement, textId: string): HTMLButtonElement {
-  let btn = bubble.querySelector<HTMLButtonElement>('button.ls-uc-toggle');
+  let btn = bubble.querySelector<HTMLButtonElement>('button.ebbli-uc-toggle');
   if (btn) {
     btn.setAttribute('aria-controls', textId);
     return btn;
@@ -194,7 +194,7 @@ function ensureButton(bubble: HTMLElement, textId: string): HTMLButtonElement {
 
   btn = document.createElement('button');
   btn.type = 'button';
-  btn.className = 'ls-uc-toggle';
+  btn.className = 'ebbli-uc-toggle';
   btn.setAttribute('aria-controls', textId);
   bubble.appendChild(btn);
   return btn;
@@ -209,28 +209,28 @@ function applyFadeColor(bubble: HTMLElement, text: HTMLElement): void {
   // Use the computed background of the bubble to blend the fade overlay.
   const bg = getComputedStyle(bubble).backgroundColor;
   if (bg) {
-    text.style.setProperty('--ls-uc-fade-to', bg);
+    text.style.setProperty('--ebbli-uc-fade-to', bg);
   }
 }
 
 function removeCollapseUi(root: HTMLElement, bubble: HTMLElement, text: HTMLElement): void {
   bubble.removeAttribute(STATE_ATTR);
-  bubble.classList.remove('ls-uc-bubble');
-  bubble.querySelector('button.ls-uc-toggle')?.remove();
-  text.classList.remove('ls-uc-text');
-  text.style.removeProperty('--ls-uc-fade-to');
+  bubble.classList.remove('ebbli-uc-bubble');
+  bubble.querySelector('button.ebbli-uc-toggle')?.remove();
+  text.classList.remove('ebbli-uc-text');
+  text.style.removeProperty('--ebbli-uc-fade-to');
   root.removeAttribute(PROCESSED_ATTR);
 }
 
 function ensureCollapseUi(root: HTMLElement, bubble: HTMLElement, text: HTMLElement): void {
   root.setAttribute(PROCESSED_ATTR, '1');
 
-  bubble.classList.add('ls-uc-bubble');
-  text.classList.add('ls-uc-text');
+  bubble.classList.add('ebbli-uc-bubble');
+  text.classList.add('ebbli-uc-text');
   applyFadeColor(bubble, text);
 
   const messageId = root.getAttribute('data-message-id') || '';
-  const textId = text.id || `ls-uc-text-${safeIdFragment(messageId)}`;
+  const textId = text.id || `ebbli-uc-text-${safeIdFragment(messageId)}`;
   text.id = textId;
 
   if (!bubble.getAttribute(STATE_ATTR)) {
@@ -253,7 +253,7 @@ function processUserMessageRoot(root: HTMLElement): void {
   // Measure for "long" before clamping. Caller batches this in rAF.
   const fullHeight = text.scrollHeight;
   const isLong = fullHeight > COLLAPSED_MAX_HEIGHT_PX + 24;
-  const hasUi = root.hasAttribute(PROCESSED_ATTR) || !!bubble.querySelector('button.ls-uc-toggle');
+  const hasUi = root.hasAttribute(PROCESSED_ATTR) || !!bubble.querySelector('button.ebbli-uc-toggle');
 
   if (!isLong) {
     if (hasUi) removeCollapseUi(root, bubble, text);
@@ -441,9 +441,9 @@ export function installUserCollapse(): UserCollapseController {
         if (!scroller) return;
         const target = ev.target;
         if (!(target instanceof Element)) return;
-        const btn = target.closest<HTMLButtonElement>('button.ls-uc-toggle');
+        const btn = target.closest<HTMLButtonElement>('button.ebbli-uc-toggle');
         if (!btn) return;
-        const bubble = btn.closest<HTMLElement>('.ls-uc-bubble');
+        const bubble = btn.closest<HTMLElement>('.ebbli-uc-bubble');
         if (!bubble) return;
 
         const wasPinned = isPinnedToBottom(scroller);

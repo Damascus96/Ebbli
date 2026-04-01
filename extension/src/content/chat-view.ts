@@ -1,28 +1,23 @@
 /**
- * LightSession for ChatGPT - Chat view helpers
+ * Ebbli - Chat view helpers
  */
 
-const TURN_SELECTORS = [
+const TURN_SELECTOR = [
   '[data-testid="conversation-turn"]',
   '[data-message-id]',
   '[data-message-author-role]',
   'article',
-];
+].join(',')
 
 export function hasConversationTurns(root: ParentNode): boolean {
-  for (const selector of TURN_SELECTORS) {
-    if (root.querySelector(selector)) {
-      return true;
-    }
-  }
-  return false;
+  return !!root.querySelector(TURN_SELECTOR)
 }
 
 export function isEmptyChatView(root: ParentNode): boolean {
-  const main = root.querySelector('main');
+  const main = root.querySelector('main')
   if (!main) {
-    return false;
+    return false
   }
 
-  return !hasConversationTurns(main);
+  return !hasConversationTurns(main)
 }

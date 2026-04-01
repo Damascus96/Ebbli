@@ -1,5 +1,5 @@
 /**
- * LightSession Pro - Message Protocol
+ * Ebbli - Message Protocol
  * Runtime communication between background, content, and popup scripts
  */
 
@@ -53,7 +53,7 @@ export async function sendMessageWithTimeout<T extends RuntimeResponse>(
 
       // Check for error response from handler (don't retry real errors)
       if ('error' in response && typeof response.error === 'string') {
-        throw new Error(`Handler error: ${response.error}`);
+        throw new Error(`Ebbli handler error: ${response.error}`);
       }
 
       return response;
@@ -61,7 +61,7 @@ export async function sendMessageWithTimeout<T extends RuntimeResponse>(
       lastError = error instanceof Error ? error : new Error(String(error));
 
       // Don't retry on timeout or handler errors - these are real failures
-      if (lastError.message === 'Message timeout' || lastError.message.startsWith('Handler error:')) {
+      if (lastError.message === 'Message timeout' || lastError.message.startsWith('Ebbli handler error:')) {
         throw lastError;
       }
 

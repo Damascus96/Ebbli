@@ -1,6 +1,6 @@
-# Contributing to LightSession
+# Contributing to Ebbli
 
-Thank you for your interest in contributing to LightSession! This Firefox extension helps keep ChatGPT fast by optimizing DOM performance.
+Thank you for your interest in contributing to Ebbli! This Firefox extension helps keep ChatGPT fast by optimizing DOM performance.
 
 ## Getting Started
 
