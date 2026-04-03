@@ -11,8 +11,8 @@
 
 import browser from '../shared/browser-polyfill';
 
-const STORAGE_KEY = 'ebbli_settings';
-const LOCAL_STORAGE_KEY = 'ebbli_config';
+const STORAGE_KEY = 'eb_settings';
+const LOCAL_STORAGE_KEY = 'eb_config';
 
 /**
  * Sync settings from browser.storage to localStorage AND dispatch CustomEvent.
@@ -33,7 +33,7 @@ async function syncSettingsToLocalStorage(): Promise<void> {
       // Write to localStorage for page-script access
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(config));
       // Dispatch event immediately - faster than waiting for content.ts (document_idle)
-      window.dispatchEvent(new CustomEvent('ebbli-config', { detail: JSON.stringify(config) }));
+      window.dispatchEvent(new CustomEvent('Ebbli-config', { detail: JSON.stringify(config) }));
     }
   } catch {
     // Storage access failed - page-script will use defaults after timeout
