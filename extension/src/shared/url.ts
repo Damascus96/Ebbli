@@ -16,3 +16,4 @@ export function isChatGptUrl(url?: string | null): boolean {
     return false;
   }
 }
+
