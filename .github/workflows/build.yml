@@ -45,3 +45,4 @@ jobs:
             extension/icons/
             extension/manifest.json
           retention-days: 7
+          
