@@ -1,6 +1,7 @@
 /**
  * Ebbli for ChatGPT - Status Bar
  * Compact floating pill indicator showing trimming statistics
+ * Hiraeth House design system V3
  */
 
 import { TIMING } from '../shared/constants';
@@ -48,6 +49,7 @@ function getOrCreateStatusBar(): HTMLElement | null {
 
 /**
  * Apply inline styles to the status bar (compact pill, bottom-right)
+ * All colour values from Hiraeth House design system V3
  */
 function applyStatusBarStyles(bar: HTMLElement): void {
   Object.assign(bar.style, {
@@ -57,16 +59,16 @@ function applyStatusBarStyles(bar: HTMLElement): void {
     zIndex: '2147483647',
     padding: '4px 12px',
     fontSize: '10px',
-    fontFamily: '"Josefin Sans", "Segoe UI", sans-serif',
-    fontWeight: '300',
+    fontFamily: '"Cabinet Grotesk", "Segoe UI", sans-serif',
+    fontWeight: '600',
     letterSpacing: '0.12em',
     textTransform: 'uppercase',
-    color: '#9aaa90',                             // text-2 sage
-    backgroundColor: 'rgba(19, 31, 16, 0.92)',   // bg forest green
-    border: '1px solid rgba(255, 255, 255, 0.08)',
+    color: '#9aaa90',                             // --text-2 muted sage
+    backgroundColor: 'rgba(9, 13, 8, 0.92)',     // --bg #090d08
+    border: '1px solid rgba(255, 255, 255, 0.07)',
     borderRadius: '9999px',
-    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.5)',
-    backdropFilter: 'blur(6px)',
+    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.6)',
+    backdropFilter: 'blur(8px)',
     maxWidth: '60%',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
@@ -77,7 +79,7 @@ function applyStatusBarStyles(bar: HTMLElement): void {
 }
 
 /**
- * Get status bar text based on current state (short format for pill)
+ * Get status bar text based on current state
  */
 function getStatusText(stats: StatusBarStats): { text: string; state: StatusBarState } {
   if (stats.trimmedMessages > 0) {
@@ -109,30 +111,31 @@ function getStatusText(stats: StatusBarStats): { text: string; state: StatusBarS
 
 /**
  * Apply state-specific styling
+ * Colour values: Hiraeth House design system V3
  */
 function applyStateStyles(bar: HTMLElement, state: StatusBarState): void {
-  // Reset to Hiraeth House defaults
+  // Reset to V3 defaults
   bar.style.opacity = '1';
-  bar.style.color = '#9aaa90';                              // text-2 sage
-  bar.style.backgroundColor = 'rgba(19, 31, 16, 0.92)';   // bg forest green
-  bar.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+  bar.style.color = '#9aaa90';                              // --text-2 muted sage
+  bar.style.backgroundColor = 'rgba(9, 13, 8, 0.92)';     // --bg #090d08
+  bar.style.borderColor = 'rgba(255, 255, 255, 0.07)';    // --border
 
   switch (state) {
     case 'active':
-      bar.style.color = '#00C2A0';                          // teal
-      bar.style.backgroundColor = 'rgba(19, 31, 16, 0.92)';
-      bar.style.borderColor = 'rgba(0, 194, 160, 0.22)';   // teal-border
+      bar.style.color = '#00C2A0';                          // --teal
+      bar.style.backgroundColor = 'rgba(9, 13, 8, 0.92)';
+      bar.style.borderColor = 'rgba(0, 194, 160, 0.22)';   // --teal-border
       break;
     case 'waiting':
-      bar.style.color = '#5a7a50';                          // text-3 dark sage
+      bar.style.color = '#5a7a50';                          // --text-3 dark sage
       break;
     case 'all-visible':
-      // Keep neutral styling
+      // Neutral default styling — no override needed
       break;
     case 'unrecognized':
-      bar.style.color = '#F0AD4E';                          // amber
-      bar.style.backgroundColor = 'rgba(19, 31, 16, 0.92)';
-      bar.style.borderColor = 'rgba(240, 173, 78, 0.25)';
+      bar.style.color = '#F0AD4E';                          // --amber
+      bar.style.backgroundColor = 'rgba(9, 13, 8, 0.92)';
+      bar.style.borderColor = 'rgba(240, 173, 78, 0.25)';  // --warning-border
       break;
   }
 }
@@ -175,11 +178,8 @@ function renderWaitingStatusBar(bar: HTMLElement): void {
  * Update the status bar with new stats (throttled, with change detection)
  */
 export function updateStatusBar(stats: StatusBarStats): void {
-  // Page-script reports an absolute "currently hidden" count (not a delta),
-  // so the status bar must not accumulate across repeated status events.
   const displayStats: StatusBarStats = stats;
 
-  // Change detection: skip if stats haven't changed
   if (statsEqual(displayStats, currentStats)) {
     return;
   }
@@ -190,12 +190,10 @@ export function updateStatusBar(stats: StatusBarStats): void {
     return;
   }
 
-  // Throttle: check if enough time has passed since last update
   const now = performance.now();
   const elapsed = now - lastUpdateTime;
 
   if (elapsed >= TIMING.STATUS_BAR_THROTTLE_MS) {
-    // Enough time passed, render immediately
     if (pendingUpdateTimer !== null) {
       clearTimeout(pendingUpdateTimer);
       pendingUpdateTimer = null;
@@ -203,7 +201,6 @@ export function updateStatusBar(stats: StatusBarStats): void {
     pendingStats = null;
     renderStatusBar(displayStats);
   } else {
-    // Too soon, schedule pending update
     pendingStats = displayStats;
     if (pendingUpdateTimer === null) {
       const delay = TIMING.STATUS_BAR_THROTTLE_MS - elapsed;
@@ -274,7 +271,6 @@ export function hideStatusBar(): void {
  * Remove the status bar from DOM
  */
 export function removeStatusBar(): void {
-  // Clear any pending update timer
   if (pendingUpdateTimer !== null) {
     clearTimeout(pendingUpdateTimer);
     pendingUpdateTimer = null;

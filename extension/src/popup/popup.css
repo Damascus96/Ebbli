@@ -1,52 +1,60 @@
 /**
- * Ebbli — Hiraeth House design system
- * Forest green base · Cream text · Teal #00C2A0 accent
- * EB Garamond (wordmark) · Josefin Sans (labels) · Inter (body)
+ * Ebbli for ChatGPT
+ * Hiraeth House design system V3
+ * Cabinet Grotesk (display) · Satoshi (body) · EB Garamond (wordmark)
+ * Dark base #090d08 · Cream text · Teal #00C2A0 · Muted sage lead #8A9A82
  */
 
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&family=Josefin+Sans:wght@200;300;400&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@200;300;400;500;700;800&family=Satoshi:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Geist+Mono:wght@400;500&display=swap');
 
 /* ============================================
-   Design Tokens — Dark mode default (forest green)
+   Design Tokens — Dark mode default
    ============================================ */
 :root {
   color-scheme: dark;
 
-  /* Brand */
-  --teal:         #00C2A0;
-  --teal-dim:     rgba(0, 194, 160, 0.10);
-  --teal-border:  rgba(0, 194, 160, 0.22);
-  --teal-glow:    0 0 0 3px rgba(0, 194, 160, 0.18);
+  /* Product identity */
+  --ebb:           #8A9A82;
+  --ebb-dim:       rgba(138, 154, 130, 0.12);
+  --ebb-border:    rgba(138, 154, 130, 0.25);
 
-  /* Surfaces — warm forest green */
-  --bg:           #131f10;
-  --bg-2:         #192914;
-  --bg-3:         #1e3018;
-  --surface:      rgba(255, 255, 255, 0.06);
-  --surface-2:    rgba(255, 255, 255, 0.09);
-  --border:       rgba(255, 255, 255, 0.08);
-  --border-2:     rgba(255, 255, 255, 0.13);
-
-  /* Text */
-  --text-1:       #ede5c8;   /* cream */
-  --text-2:       #9aaa90;   /* muted sage */
-  --text-3:       #5a7a50;   /* dark sage */
+  /* Shared teal — the li */
+  --teal:          #00C2A0;
+  --teal-dim:      rgba(0, 194, 160, 0.10);
+  --teal-border:   rgba(0, 194, 160, 0.22);
+  --teal-glow:     0 0 0 3px rgba(0, 194, 160, 0.16);
 
   /* Semantic */
-  --success:      #00C2A0;
-  --warning:      #F0AD4E;
-  --warning-bg:   rgba(240, 173, 78, 0.12);
-  --warning-text: #F0AD4E;
-  --error:        #FF4560;
-  --error-bg:     rgba(255, 69, 96, 0.10);
+  --warning:       #F0AD4E;
+  --warning-bg:    rgba(240, 173, 78, 0.12);
+  --warning-border:rgba(240, 173, 78, 0.25);
+  --error:         #A63D2F;
+  --error-bg:      rgba(166, 61, 47, 0.10);
+  --error-border:  rgba(166, 61, 47, 0.25);
+
+  /* Surfaces */
+  --bg:            #090d08;
+  --bg-2:          #0d1409;
+  --bg-3:          #111a0d;
+  --surface:       rgba(255, 255, 255, 0.04);
+  --surface-2:     rgba(255, 255, 255, 0.07);
+  --border:        rgba(255, 255, 255, 0.07);
+  --border-2:      rgba(255, 255, 255, 0.13);
+
+  /* Text */
+  --text-1:        #ede5c8;
+  --text-2:        #9aaa90;
+  --text-3:        #5a7a50;
 
   /* Typography */
-  --font:         'Inter', system-ui, sans-serif;
-  --font-serif:   'EB Garamond', Georgia, serif;
-  --font-ui:      'Josefin Sans', sans-serif;
+  --font:          'Satoshi', system-ui, sans-serif;
+  --font-display:  'Cabinet Grotesk', sans-serif;
+  --font-serif:    'EB Garamond', Georgia, serif;
+  --mono:          'Geist Mono', monospace;
 
-  --fs-xs:   11px;
-  --fs-sm:   12px;
+  /* Scale */
+  --fs-xs:   10px;
+  --fs-sm:   11px;
   --fs-base: 13px;
   --fs-md:   14px;
   --fs-lg:   18px;
@@ -64,20 +72,21 @@
   --r-sm:   4px;
   --r-md:   8px;
   --r-lg:   12px;
+  --r-xl:   16px;
   --r-pill: 9999px;
 
   /* Transitions */
   --t-fast:   150ms ease;
   --t-base:   200ms ease;
-  --t-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --t-spring: 300ms cubic-bezier(0.16, 1, 0.3, 1);
 
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.6);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.7);
 }
 
 /* ============================================
-   Light Mode Overrides — warm cream
+   Light Mode Overrides
    ============================================ */
 @media (prefers-color-scheme: light) {
   :root {
@@ -137,36 +146,37 @@ body {
   position: relative;
   background: var(--bg-3);
   border-bottom: 1px solid var(--border);
-  padding: var(--sp-4) var(--sp-4) var(--sp-5);
+  padding: var(--sp-5) var(--sp-4) var(--sp-4);
   overflow: hidden;
 }
 
-/* Subtle ambient glow behind wordmark */
+/* Mesh blob — static, no animation, performance safe */
 .eb-header::before {
   content: '';
   position: absolute;
-  top: -20px;
-  left: -20px;
-  width: 160px;
-  height: 100px;
-  background: radial-gradient(ellipse, rgba(0, 194, 160, 0.10), transparent 70%);
+  top: -24px;
+  left: -24px;
+  width: 180px;
+  height: 120px;
+  background: radial-gradient(ellipse, rgba(138, 154, 130, 0.12), transparent 70%);
   pointer-events: none;
 }
 
 .eb-header-content {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   position: relative;
+  z-index: 1;
 }
 
-/* Wave accent line at the bottom of header */
+/* Wave accent — ebb line in lower third of header */
 .eb-header-accent {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 20px;
+  height: 18px;
   overflow: hidden;
   pointer-events: none;
 }
@@ -175,32 +185,31 @@ body {
   content: '';
   position: absolute;
   bottom: 0;
-  left: -10px;
-  right: -10px;
+  left: 0;
+  right: 0;
   height: 1px;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    var(--teal-border) 30%,
-    rgba(0, 194, 160, 0.35) 50%,
-    var(--teal-border) 70%,
+    var(--teal-border) 25%,
+    rgba(0, 194, 160, 0.30) 50%,
+    var(--teal-border) 75%,
     transparent 100%
   );
 }
 
-/* SVG wave drawn via clip — painted purely in CSS */
 .eb-header-accent::after {
   content: '';
   position: absolute;
-  bottom: 2px;
+  bottom: 3px;
   left: 0;
   right: 0;
-  height: 6px;
+  height: 5px;
   background:
-    radial-gradient(ellipse 30px 6px at 12% 100%, rgba(0, 194, 160, 0.18), transparent),
-    radial-gradient(ellipse 40px 5px at 38% 40%, rgba(0, 194, 160, 0.12), transparent),
-    radial-gradient(ellipse 30px 6px at 62% 100%, rgba(0, 194, 160, 0.15), transparent),
-    radial-gradient(ellipse 40px 5px at 85% 30%, rgba(0, 194, 160, 0.10), transparent);
+    radial-gradient(ellipse 28px 5px at 10% 100%, rgba(0, 194, 160, 0.14), transparent),
+    radial-gradient(ellipse 36px 4px at 35% 35%, rgba(0, 194, 160, 0.09), transparent),
+    radial-gradient(ellipse 28px 5px at 60% 100%, rgba(0, 194, 160, 0.12), transparent),
+    radial-gradient(ellipse 36px 4px at 82% 30%, rgba(0, 194, 160, 0.08), transparent);
 }
 
 /* ============================================
@@ -209,27 +218,26 @@ body {
 .eb-logo {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
 .eb-logo h1 {
-  font-family: var(--font-serif);
-  font-size: var(--fs-xl);
-  font-weight: 400;
-  letter-spacing: 0.03em;
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   line-height: 1;
-  color: var(--text-1);
+  color: var(--ebb);
 }
 
-/* "li" always teal — applied via HTML span */
 .eb-logo h1 .eb-li {
   color: var(--teal);
 }
 
 .eb-subtitle {
-  font-family: var(--font-ui);
+  font-family: var(--font-display);
   font-size: 9px;
-  font-weight: 300;
+  font-weight: 500;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -240,6 +248,7 @@ body {
    ============================================ */
 .eb-master-toggle {
   position: relative;
+  padding-top: 2px;
 }
 
 .eb-toggle-input {
@@ -251,8 +260,8 @@ body {
 
 .eb-toggle-track {
   display: block;
-  width: 48px;
-  height: 26px;
+  width: 44px;
+  height: 24px;
   background: var(--surface-2);
   border: 1px solid var(--border-2);
   border-radius: var(--r-pill);
@@ -265,8 +274,8 @@ body {
   position: absolute;
   top: 3px;
   left: 3px;
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   background: var(--text-3);
   border-radius: 50%;
   box-shadow: var(--shadow-sm);
@@ -279,7 +288,7 @@ body {
 }
 
 .eb-toggle-input:checked + .eb-toggle-track .eb-toggle-thumb {
-  transform: translateX(22px);
+  transform: translateX(20px);
   background: var(--teal);
 }
 
@@ -288,18 +297,16 @@ body {
   outline-offset: 2px;
 }
 
-/* Indicator dots */
 .eb-toggle-track::after {
   content: '';
   position: absolute;
   top: 50%;
-  right: 9px;
+  right: 8px;
   transform: translateY(-50%);
   width: 4px;
   height: 4px;
   background: var(--border-2);
   border-radius: 50%;
-  opacity: 1;
   transition: opacity var(--t-fast);
 }
 
@@ -309,7 +316,7 @@ body {
   content: '';
   position: absolute;
   top: 50%;
-  left: 9px;
+  left: 8px;
   transform: translateY(-50%);
   width: 4px;
   height: 4px;
@@ -357,9 +364,9 @@ body {
 }
 
 .eb-card-title {
-  font-family: var(--font-ui);
+  font-family: var(--font-display);
   font-size: 9px;
-  font-weight: 300;
+  font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--text-3);
@@ -374,7 +381,6 @@ body {
   pointer-events: none;
 }
 
-/* Debug card */
 .eb-card-debug {
   border-style: dashed;
   opacity: 0.7;
@@ -397,23 +403,25 @@ body {
 }
 
 .eb-slider-label {
+  font-family: var(--font);
   font-size: var(--fs-sm);
   color: var(--text-2);
 }
 
 .eb-slider-value {
-  font-family: var(--font-serif);
-  font-size: var(--fs-xl);
-  font-weight: 400;
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
   color: var(--teal);
-  min-width: 36px;
+  min-width: 40px;
   text-align: center;
+  line-height: 1;
   transition: color var(--t-fast), transform var(--t-fast);
-  letter-spacing: 0.01em;
 }
 
 .eb-slider-value.is-dragging {
-  transform: scale(1.08);
+  transform: scale(1.06);
 }
 
 .eb-slider-track-wrapper {
@@ -426,7 +434,7 @@ body {
 
 .eb-slider {
   width: 100%;
-  height: 6px;
+  height: 4px;
   border-radius: var(--r-pill);
   background: var(--bg-3);
   border: 1px solid var(--border);
@@ -442,12 +450,12 @@ body {
 .eb-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--teal);
   cursor: grab;
-  border: 3px solid var(--bg);
+  border: 2px solid var(--bg);
   box-shadow: var(--shadow-sm), 0 0 0 1px var(--teal-border);
   transition: box-shadow var(--t-base);
 }
@@ -462,23 +470,16 @@ body {
 }
 
 .eb-slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--teal);
   cursor: grab;
-  border: 3px solid var(--bg);
+  border: 2px solid var(--bg);
   box-shadow: var(--shadow-sm), 0 0 0 1px var(--teal-border);
-  transition: box-shadow var(--t-base);
 }
 
-.eb-slider::-moz-range-thumb:hover {
-  box-shadow: var(--shadow-md), 0 0 0 4px var(--teal-dim);
-}
-
-.eb-slider::-moz-range-thumb:active {
-  cursor: grabbing;
-}
+.eb-slider::-moz-range-thumb:active { cursor: grabbing; }
 
 .eb-slider:focus-visible {
   outline: 2px solid var(--teal);
@@ -486,18 +487,14 @@ body {
   border-radius: var(--r-pill);
 }
 
-.eb-slider:focus::-webkit-slider-thumb {
-  box-shadow: var(--shadow-sm), var(--teal-glow);
-}
-
 /* Track fill */
 .eb-slider-track-fill {
   position: absolute;
   top: 50%;
   left: 0;
-  height: 6px;
+  height: 4px;
   transform: translateY(-50%);
-  background: linear-gradient(90deg, rgba(0, 194, 160, 0.5), var(--teal));
+  background: linear-gradient(90deg, rgba(0, 194, 160, 0.4), var(--teal));
   border-radius: var(--r-pill) 0 0 var(--r-pill);
   pointer-events: none;
   z-index: 1;
@@ -506,10 +503,10 @@ body {
 .eb-slider-labels {
   display: flex;
   justify-content: space-between;
-  font-family: var(--font-ui);
-  font-size: 10px;
-  font-weight: 300;
-  letter-spacing: 0.08em;
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   color: var(--text-3);
 }
 
@@ -523,7 +520,7 @@ body {
   cursor: pointer;
   padding: var(--sp-2);
   margin: 0 calc(-1 * var(--sp-2));
-  border-radius: var(--r-sm);
+  border-radius: var(--r-md);
   transition: background var(--t-fast);
 }
 
@@ -538,6 +535,7 @@ body {
 .eb-checkbox-wrapper {
   position: relative;
   flex-shrink: 0;
+  padding-top: 1px;
 }
 
 .eb-checkbox-input {
@@ -548,8 +546,8 @@ body {
 }
 
 .eb-checkbox-box {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   border: 1px solid var(--border-2);
   border-radius: var(--r-sm);
   background: var(--surface);
@@ -563,8 +561,8 @@ body {
 }
 
 .eb-checkbox-check {
-  width: 11px;
-  height: 11px;
+  width: 10px;
+  height: 10px;
   color: var(--bg);
   opacity: 0;
   transform: scale(0.5);
@@ -602,19 +600,18 @@ body {
 }
 
 .eb-checkbox-label {
+  font-family: var(--font);
   font-size: var(--fs-base);
   font-weight: 400;
   color: var(--text-1);
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
 }
 
 .eb-checkbox-description {
   font-size: var(--fs-xs);
   color: var(--text-3);
-  line-height: 1.4;
+  line-height: 1.5;
   letter-spacing: 0.01em;
+  font-family: var(--font);
 }
 
 /* ============================================
@@ -623,9 +620,9 @@ body {
 .eb-badge {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-ui);
+  font-family: var(--font-display);
   font-size: 9px;
-  font-weight: 400;
+  font-weight: 700;
   padding: 2px 7px;
   border-radius: var(--r-pill);
   text-transform: uppercase;
@@ -634,9 +631,9 @@ body {
 }
 
 .eb-badge-warning {
-  color: var(--warning-text);
+  color: var(--warning);
   background: var(--warning-bg);
-  border-color: rgba(240, 173, 78, 0.25);
+  border-color: var(--warning-border);
 }
 
 .eb-badge-success {
@@ -655,9 +652,11 @@ body {
   gap: var(--sp-2);
   width: 100%;
   padding: var(--sp-3) var(--sp-4);
-  font-family: var(--font);
-  font-size: var(--fs-base);
-  font-weight: 500;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   border: none;
   border-radius: var(--r-md);
   cursor: pointer;
@@ -667,9 +666,7 @@ body {
     box-shadow var(--t-fast);
 }
 
-.eb-button:active {
-  transform: scale(0.98);
-}
+.eb-button:active { transform: scale(0.98); }
 
 .eb-button:focus-visible {
   outline: none;
@@ -700,7 +697,10 @@ body {
 }
 
 .eb-status {
+  font-family: var(--font-display);
   font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-align: center;
   min-height: 20px;
   padding: var(--sp-2);
@@ -708,28 +708,24 @@ body {
   transition:
     background var(--t-fast),
     color var(--t-fast);
-  font-family: var(--font-ui);
-  letter-spacing: 0.06em;
 }
 
-.eb-status:empty {
-  display: none;
-}
+.eb-status:empty { display: none; }
 
 .eb-status:not(:empty) {
   color: var(--teal);
   background: var(--teal-dim);
   border: 1px solid var(--teal-border);
-  animation: fadeIn var(--t-base) ease-out;
+  animation: fadeUp var(--t-base) ease-out;
 }
 
 .eb-status.error {
   color: var(--error);
   background: var(--error-bg);
-  border: 1px solid rgba(255, 69, 96, 0.22);
+  border: 1px solid var(--error-border);
 }
 
-/* Support Button — teal ghost style */
+/* Support button */
 .eb-button-support {
   display: flex;
   align-items: center;
@@ -737,9 +733,9 @@ body {
   gap: var(--sp-2);
   width: 100%;
   padding: 9px var(--sp-4);
-  font-family: var(--font-ui);
+  font-family: var(--font-display);
   font-size: var(--fs-sm);
-  font-weight: 300;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--teal);
@@ -758,11 +754,11 @@ body {
   background: rgba(0, 194, 160, 0.16);
   border-color: rgba(0, 194, 160, 0.40);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 194, 160, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 194, 160, 0.10);
 }
 
 .eb-button-support:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
   box-shadow: none;
 }
 
@@ -772,21 +768,21 @@ body {
 }
 
 .eb-support-heart {
-  font-size: 14px;
+  font-size: 13px;
   opacity: 0.9;
-  animation: heartbeat 2s ease-in-out infinite;
+  animation: heartbeat 2.5s ease-in-out infinite;
 }
 
 @keyframes heartbeat {
   0%, 100% { transform: scale(1); }
-  50%       { transform: scale(1.15); }
+  50%       { transform: scale(1.18); }
 }
 
 .eb-version {
-  font-family: var(--font-ui);
+  font-family: var(--mono);
   font-size: 9px;
-  font-weight: 300;
-  letter-spacing: 0.18em;
+  font-weight: 400;
+  letter-spacing: 0.16em;
   color: var(--text-3);
   text-align: center;
   text-transform: uppercase;
@@ -795,13 +791,7 @@ body {
 /* ============================================
    Animations
    ============================================ */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-3px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
 }

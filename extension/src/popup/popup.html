@@ -4,20 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light dark">
-  <meta name="theme-color" content="#131f10">
+  <meta name="theme-color" content="#090d08">
   <title>Ebbli</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <div class="eb-popup">
-    <!-- Header with gradient and master toggle -->
+
+    <!-- Header -->
     <header class="eb-header">
       <div class="eb-header-content">
         <div class="eb-logo">
           <h1>Ebb<span class="eb-li">li</span></h1>
           <p class="eb-subtitle">Keep ChatGPT flow moving fast</p>
         </div>
-        <!-- Master toggle in header -->
         <div class="eb-master-toggle">
           <input type="checkbox" id="enableToggle" class="eb-toggle-input" aria-label="Enable extension">
           <label for="enableToggle" class="eb-toggle-track">
@@ -29,6 +29,7 @@
     </header>
 
     <main class="eb-main">
+
       <!-- Card: Message Retention -->
       <section class="eb-card" id="retentionCard">
         <div class="eb-card-header">
@@ -49,6 +50,7 @@
                 min="1"
                 max="100"
                 value="10"
+                step="1"
                 aria-label="Number of messages to keep"
                 aria-valuemin="1"
                 aria-valuemax="100"
@@ -71,7 +73,7 @@
           <span class="eb-card-title">Options</span>
         </div>
         <div class="eb-card-content">
-          <!-- Show Status Bar -->
+
           <label class="eb-checkbox-row">
             <div class="eb-checkbox-wrapper">
               <input type="checkbox" id="showStatusBarCheckbox" class="eb-checkbox-input" aria-label="Show status bar">
@@ -87,7 +89,6 @@
             </div>
           </label>
 
-          <!-- Collapse long user messages -->
           <label class="eb-checkbox-row">
             <div class="eb-checkbox-wrapper">
               <input
@@ -111,7 +112,7 @@
         </div>
       </section>
 
-      <!-- Card: Debug (dev only) -->
+      <!-- Card: Developer (dev only, hidden by default) -->
       <section class="eb-card eb-card-debug" id="debugGroup" style="display: none;">
         <div class="eb-card-header">
           <span class="eb-card-title">Developer</span>
@@ -133,19 +134,20 @@
           </label>
         </div>
       </section>
+
     </main>
 
     <!-- Footer -->
     <footer class="eb-footer">
       <div id="status" class="eb-status" role="status" aria-live="polite"></div>
       <button class="eb-button-support" id="supportLink">
-        <span class="eb-support-heart">❤</span>
+        <span class="eb-support-heart">&#10084;</span>
         <span>Support Development</span>
       </button>
       <span class="eb-version" id="version"></span>
     </footer>
-  </div>
 
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>
